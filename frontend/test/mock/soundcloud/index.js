@@ -1,0 +1,3 @@
+window.SC = {
+  'initialize': function ( ) { }
+};
