@@ -30,21 +30,25 @@ module.exports = function (grunt) {
     watch: {
       js: {
         files: ['<%= yeoman.app %>/**/*.js'],
-        tasks: ['newer:jshint:all', 'browserify']
+        tasks: []
       },
       jsTest: {
         files: ['test/spec/{,*/}*.js'],
         tasks: ['newer:jshint:test', 'karma']
+      },
+      templatess: {
+        files: ['<%= yeoman.app %>/**/*template.html'],
+        tasks: []
       },
       styles: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
         tasks: ['newer:copy:styles', 'autoprefixer']
       },
       recess: {
-        files: ['<%= yeoman.app %>/**/{,*/}*.less'],
-        tasks: ['newer:recess']
+        files: ['<%= yeoman.app %>/**/*.less'],
+        tasks: ['newer:recess', 'newer:autoprefixer', 'concat_css']
       },
-      gruntfile: {
+      grunt: {
         files: ['Gruntfile.js']
       },
       livereload: {
@@ -54,7 +58,7 @@ module.exports = function (grunt) {
         files: [
           '<%= yeoman.app %>/**/*.html',
           '.tmp/**/*.js',
-          '.tmp/**/*.css',
+          '.tmp/app.css',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
@@ -102,7 +106,8 @@ module.exports = function (grunt) {
       },
       all: [
         'Gruntfile.js',
-        '<%= yeoman.app %>/{,*/}*.js'
+        // '<%= yeoman.app %>/{,*/}*.js'
+        '<%= yeoman.app %>/app.js'
       ],
       test: {
         options: {
@@ -128,14 +133,28 @@ module.exports = function (grunt) {
       server: '.tmp'
     },
 
-    browserify: {
-      dist: {
-        files: {
-          '.tmp/app.js': ['<%= yeoman.app %>/app.js']
-        }
-      },
+    watchify: {
       options: {
         debug: true
+      },
+      dist: {
+        src: './<%= yeoman.app %>/app.js',
+        dest: './.tmp/app.js'
+      }
+    },
+
+    recess: {
+      dist: {
+        options: {
+          compile: true
+        },
+        files: [{
+          expand: true,
+          cwd: './',
+          src: ['<%= yeoman.app%>/**/*.less'],
+          dest: '.tmp/',
+          ext: '.css'
+        }]
       }
     },
 
@@ -147,10 +166,18 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '.tmp/styles/',
-          src: '{,*/}*.css',
-          dest: '.tmp/styles/'
+          cwd: './',
+          src: ['.tmp/**/*.css'],
+          ext: '.css'
         }]
+      }
+    },
+
+    'concat_css': {
+      dist: {
+        files: {
+          '.tmp/app.css': ['.tmp/app/**/*.css']
+        }
       }
     },
 
@@ -159,22 +186,6 @@ module.exports = function (grunt) {
       app: {
         src: '<%= yeoman.app %>/index.html',
         ignorePath: '<%= yeoman.app %>/'
-      }
-    },
-
-    // Executes LESS to build:
-    // 1. Boostrap in-place from its packaged sources
-    // 2. pulsar.less
-    recess: {
-      dist: {
-        options: {
-          compile: true
-        },
-        files: {
-          'app/app.css': [
-            'app/**/*.less'
-          ]
-        }
       }
     },
 
@@ -292,25 +303,19 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.dist %>/images',
           src: ['generated/*']
         }]
-      },
-      styles: {
-        expand: true,
-        cwd: '<%= yeoman.app %>',
-        dest: '.tmp/',
-        src: 'app.css'
       }
     },
 
     // Run some tasks in parallel to speed up the build process
     concurrent: {
       server: [
-        'copy:styles'
+        // 'copy:styles'
       ],
       test: [
-        'copy:styles'
+        // 'copy:styles'
       ],
       dist: [
-        'copy:styles',
+        // 'copy:styles',
         'imagemin',
         'svgmin'
       ]
@@ -363,7 +368,8 @@ module.exports = function (grunt) {
       'recess',
       'concurrent:server',
       'autoprefixer',
-      'browserify',
+      'concat_css',
+      'watchify',
       'connect:livereload',
       'watch'
     ]);

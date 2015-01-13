@@ -5,10 +5,12 @@
   "devDependencies": {
     "browserify": "^8.1.0",
     "browserify-shim": "^3.8.2",
+    "es6ify": "^1.6.0",
     "grunt": "~0.4.5",
     "grunt-autoprefixer": "~2.1.0",
     "grunt-bower-install": "~1.6.0",
     "grunt-browserify": "^3.2.1",
+    "grunt-concat-css": "^0.3.1",
     "grunt-concurrent": "~1.0.0",
     "grunt-contrib-clean": "~0.6.0",
     "grunt-contrib-coffee": "~0.12.0",
@@ -30,6 +32,7 @@
     "grunt-rev": "~0.1.0",
     "grunt-svgmin": "~2.0.0",
     "grunt-usemin": "~3.0.0",
+    "grunt-watchify": "^0.1.0",
     "jshint-stylish": "~1.0.0",
     "karma": "~0.12.31",
     "karma-chrome-launcher": "~0.1.7",
@@ -49,6 +52,7 @@
   },
   "browserify": {
     "transform": [
+      "es6ify",
       "browserify-shim",
       "partialify"
     ]
