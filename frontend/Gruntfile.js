@@ -135,7 +135,8 @@ module.exports = function (grunt) {
 
     watchify: {
       options: {
-        debug: true
+        debug: true,
+        keepalive: false
       },
       dist: {
         src: './<%= yeoman.app %>/app.js',
@@ -390,16 +391,17 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'watchify',
     'bowerInstall',
     'recess',
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer',
-    'browserify',
     'concat',
     'ngmin',
     'copy:dist',
     'cdnify',
+    'concat_css',
     'cssmin',
     'uglify',
     'rev',
