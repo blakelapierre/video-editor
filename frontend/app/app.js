@@ -1,8 +1,14 @@
 var angular = require('angular');
 
+module.exports = {
+  'drag-and-drop': angular.module('drag-and-drop', [])
+    .directive('fileDropArea', require('./modules/drag-and-drop/fileDropArea/directive'))
+  ,
+  'video-editor': angular.module('video-editor', ['drag-and-drop'])
+    .directive('editor', require('./modules/video-editor/editor/directive'))
+    .directive('playbackSurface', require('./modules/video-editor/playbackSurface/directive'))
+    .directive('positionBar', require('./modules/video-editor/positionBar/directive'))
+    .directive('timeline', require('./modules/video-editor/timeline/directive'))
 
-module.exports = angular.module('base-angular', [])
-  .directive('center', require('./modules/base-angular/center/directive'))
-  .directive('helloWorld', require('./modules/base-angular/helloWorld/directive'))
-  .directive('spinner',    require('./modules/base-angular/spinner/directive'))
-;
+    .service('thumbnails', require('./modules/video-editor/thumbnails/service'))
+};

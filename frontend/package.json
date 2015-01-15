@@ -1,5 +1,5 @@
 {
-  "name": "base-angular",
+  "name": "video-editor",
   "version": "0.0.0",
   "dependencies": {},
   "devDependencies": {
@@ -58,7 +58,8 @@
     ]
   },
   "browserify-shim": {
-    "angular": "global:angular"
+    "angular": "global:angular",
+    "lodash": "global:_"
   },
   "engines": {
     "node": ">=0.8.0"
