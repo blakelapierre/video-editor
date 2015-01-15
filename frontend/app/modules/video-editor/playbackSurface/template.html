@@ -2,3 +2,4 @@
   <span>{{playbackRate}}</span>
 </div>
 <video ng-show="videoSrc != null" ng-src="{{videoSrc}}" ng-click="togglePlay()"></video>
+<div ng-show="videoSrc == null" class="teaser">Drop A File, yo!</div>

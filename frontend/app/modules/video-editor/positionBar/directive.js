@@ -6,7 +6,7 @@ module.exports = () => {
       element.on('click', event => {
         let el = element[0],
             videoEl = $scope.videoEl,
-            position = (event.x - el.clientLeft) / el.clientWidth;
+            position = (event.clientX - el.clientLeft) / el.clientWidth;
 
         if (videoEl.duration > 0) {
           videoEl.currentTime = position * videoEl.duration;
