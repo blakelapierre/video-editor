@@ -25,6 +25,14 @@ module.exports = () => {
           $scope.setCurrentTime();
         }
       });
+
+      $scope.$watch('pinned', event => {
+        console.log(event);
+        let pinned = $scope.pinned;
+
+        if (pinned) element.addClass('pinned');
+        else element.removeClass('pinned');
+      });
     },
     controller: ['$scope', $scope => {
       console.log('scope', $scope);

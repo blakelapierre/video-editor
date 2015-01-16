@@ -1,1 +1,4 @@
-<div class="bar" style="width:{{currentPercent}}%;"><span class="time">{{currentTime}}</span></div>
+<div class="commands">
+  <div class="pin" ng-click="pinned = !pinned">{{pinned ? 'pinned' : 'pin'}}</div>
+</div>
+<div class="bar" style="width:{{currentPercent}}%;"><span class="time current-time">{{currentTime}}</span></div><span class="time remaining-time">100</span>

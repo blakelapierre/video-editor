@@ -1,40 +1,48 @@
 position-bar {
+  position: relative;
+
   width: 100%;
+
+  line-height: 1em;
 
   background-color: #999;
 
+  font-size: 0.33em;
+
+  transition: all 0.25s linear;
+
+  .commands {
+    position: absolute;
+
+    bottom: 100%;
+
+    color: #0f0;
+
+    display: none;
+  }
+
   .bar {
+    float: left;
+
     width: 0;
-    height: 0.33em;
-    line-height: 0.33em;
 
     text-align: right;
 
     background-color: #666;
     color: #fff;
 
-    transition: height 0.25s linear, line-height 0.25s linear;
-
-    .time {
-      font-size: 0.33em;
-
-      transition: font-size 0.25s linear;
-    }
   }
 
   &:hover, &.pinned {
+    font-size: 1em;
 
-    .bar {
-      height: 1.25em;
-      line-height: 1.25em;
+    height: 1.25em;
+    line-height: 1.25em;
 
-      transition: height 0.25s linear, line-height 0.25s linear;
-    }
+    transition: all 0.25s linear;
 
-    .time {
-      font-size: 1em;
-
-      transition: font-size 0.25s linear;
+    .commands {
+      display: block;
     }
   }
 }
