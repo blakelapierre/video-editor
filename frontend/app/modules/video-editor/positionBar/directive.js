@@ -22,7 +22,7 @@ module.exports = () => {
             swapDirection = $scope.swapDirection ? -1 : 1;
 
         if (videoEl.duration > 0) {
-          videoEl.currentTime += swapDirection * deltaY / 62;
+          videoEl.currentTime += -swapDirection * deltaY / 62;
           $scope.time();
         }
       });

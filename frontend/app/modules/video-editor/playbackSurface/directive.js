@@ -41,6 +41,10 @@ module.exports = ['$sce', 'thumbnails', ($sce, thumbnails) => {
         thumbnails.publish(videoEl);
       });
 
+      videoEl.addEventListener('past', event => {
+        console.log('paste', event);
+      });
+
       console.log('keypress');
       element.on('keypress', event => {
         console.log(event);

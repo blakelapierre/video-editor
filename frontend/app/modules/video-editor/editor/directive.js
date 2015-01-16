@@ -4,6 +4,9 @@ module.exports = ['$sce', $sce => {
     template: require('./template.html'),
     controller: ['$scope', $scope => {
 
+      $scope.receivedPaste = $event => {
+        console.log($event.clipboardData.getData('text/plain'));
+      };
     }]
   };
 }];
