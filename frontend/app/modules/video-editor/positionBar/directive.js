@@ -18,10 +18,11 @@ module.exports = () => {
       element.on('mousewheel', event => {
         let el = element[0],
             videoEl = $scope.videoEl,
-            deltaY = event.deltaY;
+            deltaY = event.deltaY,
+            swapDirection = $scope.swapDirection ? -1 : 1;
 
         if (videoEl.duration > 0) {
-          videoEl.currentTime += deltaY / 62;
+          videoEl.currentTime += swapDirection * deltaY / 62;
           $scope.time();
         }
       });
