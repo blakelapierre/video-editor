@@ -23,7 +23,7 @@ module.exports = function (grunt) {
       // configurable paths
       app: require('./bower.json').appPath || 'app',
 //    dist: 'dist'
-      dist: '../api/public'
+      dist: './.dist'
     },
 
     // Watches files for changes and runs tasks based on the changed files
