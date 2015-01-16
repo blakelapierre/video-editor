@@ -15,8 +15,7 @@ module.exports = ['$sce', 'thumbnails', ($sce, thumbnails) => {
 
       console.dir(videoEl);
 
-      let playbackVelocity = 0,
-          lastWheelTime = new Date().getTime();
+      let lastWheelTime = new Date().getTime();
 
       video.on('wheel', event => {
         let time = new Date().getTime(),
