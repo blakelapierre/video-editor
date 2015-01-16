@@ -10,7 +10,7 @@ module.exports = () => {
 
         if (videoEl.duration > 0) {
           videoEl.currentTime = position * videoEl.duration;
-          $scope.setCurrentTime();
+          $scope.time();
         }
 
       });
@@ -22,7 +22,7 @@ module.exports = () => {
 
         if (videoEl.duration > 0) {
           videoEl.currentTime += deltaY / 62;
-          $scope.setCurrentTime();
+          $scope.time();
         }
       });
 
@@ -40,22 +40,27 @@ module.exports = () => {
       let videoEl = $scope.videoEl;
 
       videoEl.addEventListener('timeupdate', event => {
-        $scope.setCurrentTime();
+        $scope.time();
       });
 
-      $scope.setCurrentTime = () => {
-        let time = videoEl.currentTime,
-            hours = Math.floor(time / (60 * 60)),
-            minutes = Math.floor((time - (hours * 60 * 60)) / 60),
-            seconds = Math.floor(time % 60);
-
+      $scope.time = () => {
         $scope.$apply(() => {
-          $scope.currentTime = (hours > 0 ? (hours + '::') : '') +
-                               (minutes > 0 ? (minutes + ':') : '') +
-                               seconds;
+          $scope.currentTime = formatTime(videoEl.currentTime);
+          $scope.remainingTime = formatTime(videoEl.duration - videoEl.currentTime);
           $scope.currentPercent = 100 * videoEl.currentTime / videoEl.duration;
         });
       };
     }]
   };
 };
+
+function formatTime(timeInMilliseconds) {
+  let time = timeInMilliseconds,
+      hours = Math.floor(time / (60 * 60)),
+      minutes = Math.floor((time - (hours * 60 * 60)) / 60),
+      seconds = Math.floor(time % 60);
+
+  return (hours > 0 ? (hours + '::') : '') +
+         (minutes < 10 ? '0' + minutes : minutes) + ':' +
+         (seconds < 10 ? '0' + seconds : seconds);
+}

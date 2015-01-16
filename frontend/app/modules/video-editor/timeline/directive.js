@@ -25,11 +25,22 @@ module.exports = ['thumbnails', thumbnails => {
           console.log(thumbnail.context);
         });
 
-        element[0].addEventListener('resize', event => console.log('resize', event));
-
         let videoEl = $scope.videoEl;
 
         videoEl.addEventListener('pause', event => {
+          drawThumbnails();
+        });
+
+        videoEl.addEventListener('timeupdate', event => {
+          if (videoEl.paused) drawThumbnails();
+          else drawThumbnails();
+        });
+
+        $scope.gotoThumbnail = thumbnail => {
+          videoEl.currentTime = thumbnail.time;
+        };
+
+        function drawThumbnails() {
           _.each(thumbnails, thumbnail => {
             let canvas = thumbnail.canvas,
                 context = thumbnail.context;
@@ -51,11 +62,7 @@ module.exports = ['thumbnails', thumbnails => {
 
             context.drawImage(videoEl, 0, 0, canvas.width, canvas.height);
           });
-        });
-
-        $scope.gotoThumbnail = thumbnail => {
-          videoEl.currentTime = thumbnail.time;
-        };
+        }
       }, 0);
     },
     controller: ['$scope', ($scope) => {
