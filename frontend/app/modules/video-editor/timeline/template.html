@@ -1,1 +1,4 @@
-<canvas ng-repeat="thumbnail in thumbnails track by $index" class="thumbnail" width="0" height="0" ng-click="gotoThumbnail(thumbnail)"></canvas>
+<div ng-repeat="thumbnail in thumbnails track by $index"
+     class="canvas-wrapper">
+  <canvas class="thumbnail" width="0" height="0" ng-click="gotoThumbnail(thumbnail)"></canvas>
+</div>

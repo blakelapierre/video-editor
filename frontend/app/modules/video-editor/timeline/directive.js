@@ -16,8 +16,8 @@ module.exports = ['thumbnails', thumbnails => {
               canvas = pair[1],
               context = canvas.getContext('2d');
 
-          canvas.width = canvas.clientWidth;
-          canvas.height = canvas.clientHeight;
+          canvas.width = canvas.parentNode.clientWidth;
+          canvas.height = canvas.width * 3 / 4;
 
           thumbnail.canvas = canvas;
           thumbnail.context = context;
