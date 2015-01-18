@@ -5,9 +5,35 @@ position-bar {
 
   width: 100%;
 
-  background-color: transparent;
+  background-color: #000;
 
   cursor: pointer;
+
+  &:hover, &.pinned {
+    .surface-overlay {
+      display: block;
+
+      position: absolute;
+      top: -150%;
+      bottom: -150%;
+
+      width: 100%;
+    }
+
+    .commands {
+      display: block;
+    }
+
+    .bar {
+      box-shadow: inset -1px 2px 2px 0px #ddd;
+
+      font-size: 1.25em;
+
+      line-height: 1em;
+
+      transition: all @duration linear, width 0;
+    }
+  }
 
   .commands {
     position: absolute;
@@ -21,6 +47,7 @@ position-bar {
 
   .bar {
     position: relative;
+
     float: left;
 
     width: 0;
@@ -66,29 +93,11 @@ position-bar {
     }
   }
 
-  &:hover, &.pinned {
-    .surface-overlay {
-      display: block;
+  .timeline-extent {
+    position: absolute;
+    bottom: 1px;
+    height: 20%;
 
-      position: absolute;
-      top: -150%;
-      bottom: -150%;
-
-      width: 100%;
-    }
-
-    .commands {
-      display: block;
-    }
-
-    .bar {
-      box-shadow: inset -1px 1px 1px 0px #ddd;
-
-      font-size: 1.25em;
-
-      line-height: 1em;
-
-      transition: all @duration linear, width 0;
-    }
+    box-shadow: 0px 1px 0px 1px #990;
   }
 }

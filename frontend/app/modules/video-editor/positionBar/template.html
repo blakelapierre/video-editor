@@ -6,4 +6,8 @@
   <div class="pin" ng-click="pinned = !pinned; $event.stopPropagation()">{{pinned ? 'pinned' : 'pin'}}</div>
   <div class="swap-direction" ng-click="swapDirection = !swapDirection; $event.stopPropagation()">swap direction</div>
 </div>
-<div class="bar" style="width:{{currentPercent}}%;"><span class="time current-time">{{currentTime}}</span><span class="time remaining-time">{{remainingTime}}</span></div>
+<div class="bar" style="width:{{currentPercent}}%;">
+  <span class="time current-time">{{currentTime}}</span>
+  <span class="time remaining-time">{{remainingTime}}</span>
+</div>
+<div ng-hide="hideTimeline" class="timeline-extent" style="width:{{timelineWidth}}%;left:{{timelineLeft}}%"></div>

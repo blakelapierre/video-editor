@@ -4,7 +4,7 @@
     <filters-panel ng-hide="hideFilters"></filters-panel>
   </div>
   <position-bar></position-bar>
-  <timeline></timeline>
+  <timeline ng-hide="hideTimeline"></timeline>
 </div>
 <div class="teaser" ng-if="video.src == null">
   <span class="drop">Drop A File, yo!</span>

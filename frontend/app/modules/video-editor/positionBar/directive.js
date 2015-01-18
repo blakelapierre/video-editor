@@ -55,22 +55,32 @@ module.exports = () => {
 
       $scope.time = () => {
         $scope.$apply(() => {
-          $scope.currentTime = formatTime(videoEl.currentTime);
-          $scope.remainingTime = formatTime(videoEl.duration - videoEl.currentTime);
-          $scope.currentPercent = 100 * videoEl.currentTime / videoEl.duration;
+          let currentTime = videoEl.currentTime,
+              duration = videoEl.duration,
+              thumbnails= $scope.thumbnails,
+              firstThumbnail = thumbnails[0],
+              lastThumbnail = thumbnails[thumbnails.length - 1];
+
+          $scope.currentTime = formatTime(currentTime);
+          $scope.remainingTime = formatTime(duration - currentTime);
+          $scope.currentPercent = 100 * (currentTime / duration);
+          $scope.timelineWidth = 100 * (lastThumbnail.time - firstThumbnail.time) / duration;
+          $scope.timelineLeft = 100 * (currentTime + firstThumbnail.offset) / duration;
         });
       };
     }]
   };
 };
 
-function formatTime(timeInMilliseconds) {
-  let time = timeInMilliseconds,
+function formatTime(timeInSeconds) {
+  let time = timeInSeconds,
       hours = Math.floor(time / (60 * 60)),
       minutes = Math.floor((time - (hours * 60 * 60)) / 60),
-      seconds = Math.floor(time % 60);
+      seconds = Math.floor(time % 60),
+      milliseconds = Math.floor(time * 10 % 10);
 
   return (hours > 0 ? (hours + 'h') : '') +
          (minutes < 10 ? '0' + minutes : minutes) + '\'' +
-         (seconds < 10 ? '0' + seconds : seconds) + '\'\'';
+         (seconds < 10 ? '0' + seconds : seconds) + '\'\'' +
+         milliseconds;
 }
