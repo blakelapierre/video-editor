@@ -17,7 +17,7 @@ module.exports = ['thumbnails', thumbnails => {
               context = canvas.getContext('2d');
 
           canvas.width = canvas.parentNode.clientWidth;
-          canvas.height = canvas.width * 3 / 4;
+          canvas.height = canvas.width * 9 / 16;
 
           thumbnail.canvas = canvas;
           thumbnail.context = context;
@@ -50,11 +50,11 @@ module.exports = ['thumbnails', thumbnails => {
                 ratio = vw / vh;
 
             if (ratio > 1) {
-              canvas.width = canvas.clientWidth;
+              canvas.width = canvas.parentNode.clientWidth;
               canvas.height = canvas.width / ratio;
             }
             else {
-              canvas.height = canvas.clientHeight;
+              canvas.height = canvas.parentNode.clientHeight;
               canvas.width = canvas.height * ratio;
             }
 
