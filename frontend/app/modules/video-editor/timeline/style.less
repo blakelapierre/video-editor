@@ -3,8 +3,14 @@ timeline {
 
   flex-flow: row;
 
+  .thumbnail-video {
+    display: none;
+  }
+
   .canvas-wrapper {
-    width: 100%;
+    position: relative;
+
+    width: 20%;
 
     flex: 1 1 auto;
 
@@ -12,6 +18,12 @@ timeline {
 
     canvas {
       width: 100%;
+    }
+
+    .time-offset {
+      position: absolute;
+      left: 0;
+      bottom: 0;
     }
   }
 }

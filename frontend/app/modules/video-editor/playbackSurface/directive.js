@@ -3,14 +3,15 @@ module.exports = ['$sce', 'thumbnails', ($sce, thumbnails) => {
     restrict: 'E',
    // replace: true,
     template: require('./template.html'),
-    scope: {
-      file: '='
-    },
+    // scope: {
+    //   file: '=',
+    //   video: '='
+    // },
     link: ($scope, element, attributes) => {
       let videoEl = element.find('video')[0],
           video = angular.element(videoEl);
 
-      $scope.$parent.videoEl = videoEl;
+      $scope.videoEl = videoEl;
       console.log($scope);
 
       console.dir(videoEl);
@@ -64,16 +65,15 @@ module.exports = ['$sce', 'thumbnails', ($sce, thumbnails) => {
       };
     },
     controller: ['$scope', $scope => {
-
       $scope.$watch('file', () => {
-        // console.log('watch', $scope.file);
+        console.log('watch', $scope.file);
         let file = $scope.file;
 
         if (file) {
           let type = file.type;
 
           if (type.indexOf('video') === 0) {
-            $scope.videoSrc = $sce.trustAsResourceUrl(URL.createObjectURL(file));
+            $scope.video.src = $sce.trustAsResourceUrl(URL.createObjectURL(file));
           }
         }
       });
