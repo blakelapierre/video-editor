@@ -50,15 +50,16 @@ module.exports = [() => {
 
       let nextIndex = 0;
       function drawThumbnails() {
-        let time = videoEl.currentTime;
+        let thumbnails = $scope.thumbnails,
+            time = videoEl.currentTime;
 
         nextIndex = 0;
 
-        _.each($scope.thumbnails, (thumbnail, index) => {
+        _.each(thumbnails, (thumbnail, index) => {
           thumbnail.time = time + thumbnail.offset;
         });
 
-        thumbnailEl.currentTime = videoEl.currentTime;
+        thumbnailEl.currentTime = thumbnails[0].time;
       }
 
       thumbnailEl.addEventListener('seeked', event => {
