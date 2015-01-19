@@ -48,47 +48,65 @@ module.exports = [() => {
         videoEl.currentTime = thumbnail.time;
       };
 
-      let nextIndex = 0;
-      function drawThumbnails() {
-        let thumbnails = $scope.thumbnails,
-            time = videoEl.currentTime;
+      let drawThumbnails = ((thumbnailEl, thumbnails) => {
+        let nextIndex = 0;
 
-        nextIndex = 0;
+        thumbnailEl.addEventListener('seeked', thumbnailSeeked);
 
-        _.each(thumbnails, (thumbnail, index) => {
-          thumbnail.time = time + thumbnail.offset;
-        });
+        return () => {
+          let thumbnails = $scope.thumbnails,
+              time = videoEl.currentTime;
 
-        thumbnailEl.currentTime = thumbnails[0].time;
-      }
+          nextIndex = 0;
 
-      thumbnailEl.addEventListener('seeked', event => {
-        let thumbnails = $scope.thumbnails,
-            thumbnail = thumbnails[nextIndex],
-            canvas = thumbnail.canvas,
-            context = thumbnail.context;
+          _.each(thumbnails, (thumbnail, index) => {
+            thumbnail.time = time + thumbnail.offset;
+          });
 
-        let vw = videoEl.videoWidth,
-            vh = videoEl.videoHeight,
-            ratio = vw / vh;
 
-        if (ratio > 1) {
-          canvas.width = canvas.parentNode.clientWidth;
-          canvas.height = canvas.width / ratio;
+          for (var i = 0; i < thumbnails.length; i++) {
+            let t = thumbnails[i];
+            if (t.time >= 0) break;
+            t.context.clearRect(0, 0, t.canvas.width, t.canvas.height);
+          }
+
+          nextIndex = i;
+
+          if (nextIndex < thumbnails.length) thumbnailEl.currentTime = thumbnails[nextIndex].time;
+        };
+
+        function thumbnailSeeked(event) {
+          let thumbnail = thumbnails[nextIndex],
+              canvas = thumbnail.canvas,
+              context = thumbnail.context;
+
+          let vw = videoEl.videoWidth,
+              vh = videoEl.videoHeight,
+              ratio = vw / vh;
+
+          if (ratio > 1) {
+            canvas.width = canvas.parentNode.clientWidth;
+            canvas.height = canvas.width / ratio;
+          }
+          else {
+            canvas.height = canvas.parentNode.clientHeight;
+            canvas.width = canvas.height * ratio;
+          }
+
+          if (thumbnail.time > thumbnailEl.duration) {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+          }
+          else {
+            context.drawImage(thumbnailEl, 0, 0, canvas.width, canvas.height);
+          }
+
+          nextIndex++;
+          if (nextIndex < thumbnails.length) {
+            let thumbnail = thumbnails[nextIndex];
+            thumbnailEl.currentTime = thumbnail.time;
+          }
         }
-        else {
-          canvas.height = canvas.parentNode.clientHeight;
-          canvas.width = canvas.height * ratio;
-        }
-
-        context.drawImage(thumbnailEl, 0, 0, canvas.width, canvas.height);
-
-        nextIndex++;
-        if (nextIndex < thumbnails.length) {
-          let thumbnail = thumbnails[nextIndex];
-          thumbnailEl.currentTime = thumbnail.time;
-        }
-      });
+      })(thumbnailEl, $scope.thumbnails);
     },
     controller: ['$scope', ($scope) => {
       $scope.thumbnails = [{},{},{},{},{},{},{},{},{},{},{},{},{}];
