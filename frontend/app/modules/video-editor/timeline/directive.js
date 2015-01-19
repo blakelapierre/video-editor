@@ -51,7 +51,7 @@ module.exports = [() => {
       let drawThumbnails = ((thumbnailEl, thumbnails) => {
         let nextIndex = 0;
 
-        thumbnailEl.addEventListener('seeked', thumbnailSeeked);
+        thumbnailEl.addEventListener('seeked', seeked);
 
         return () => {
           let thumbnails = $scope.thumbnails,
@@ -75,7 +75,7 @@ module.exports = [() => {
           if (nextIndex < thumbnails.length) thumbnailEl.currentTime = thumbnails[nextIndex].time;
         };
 
-        function thumbnailSeeked(event) {
+        function seeked(event) {
           let thumbnail = thumbnails[nextIndex],
               canvas = thumbnail.canvas,
               context = thumbnail.context;
