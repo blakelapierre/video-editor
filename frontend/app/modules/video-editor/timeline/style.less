@@ -16,9 +16,35 @@ timeline {
 
     align-self: center;
 
+    &.pending {
+      .overlay {
+        opacity: 0.5;
+        background-color: #000;
+      }
+    }
+
+    &.zero {
+      .time-offset {
+        text-align: center;
+      }
+    }
+
+    &.positive {
+      .time-offset {
+        .offset {
+          right: 0;
+        }
+
+        text-align: right;
+
+        &:before {
+          content: "+";
+        }
+      }
+    }
+
     canvas {
       width: 100%;
-
     }
 
     .overlay {
@@ -53,22 +79,6 @@ timeline {
         width: 100%;
 
         font-size: 0.65em;
-
-        &.zero {
-          text-align: center;
-        }
-
-        &.positive {
-          .offset {
-            right: 0;
-          }
-
-          text-align: right;
-
-          &:before {
-            content: "+";
-          }
-        }
       }
 
       .remove-thumbnail {

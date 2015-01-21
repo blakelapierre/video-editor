@@ -63,6 +63,10 @@ module.exports = [() => {
         videoEl.currentTime = thumbnail.time;
       };
 
+      $scope.offsetChanged = thumbnail => {
+        drawThumbnails(videoEl.currentTime);
+      };
+
       let drawThumbnails = ((thumbnailEl, thumbnails) => {
         let nextIndex = 0;
 
@@ -75,6 +79,7 @@ module.exports = [() => {
 
           _.each(thumbnails, thumbnail => {
             thumbnail.time = time + thumbnail.offset;
+            thumbnail.pending = true;
           });
 
           for (var i = 0; i < thumbnails.length; i++) {
@@ -117,11 +122,15 @@ module.exports = [() => {
             context.drawImage(thumbnailEl, 0, 0, canvas.width, canvas.height);
           }
 
+          thumbnail.pending = false;
+
           nextIndex++;
           if (nextIndex < thumbnails.length) {
             let thumbnail = thumbnails[nextIndex];
             thumbnailEl.currentTime = thumbnail.time;
           }
+
+          $scope.$apply();
         }
       })(thumbnailEl, $scope.thumbnails);
     },
