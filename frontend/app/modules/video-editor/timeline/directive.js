@@ -14,6 +14,7 @@ module.exports = [() => {
         let thumbnails = $scope.thumbnails,
             canvases = element.find('canvas');
 
+        let offsetAdjustment = thumbnails.length % 2 === 0 ? 1 : 0;
         _.each(_.zip([thumbnails, canvases]), (pair, index) => {
           let thumbnail = pair[0],
               canvas = pair[1],
@@ -26,7 +27,7 @@ module.exports = [() => {
           thumbnail.context = context;
           thumbnail.index = index;
 
-          thumbnail.offset = (index - Math.floor(thumbnails.length / 2)) * 2;
+          thumbnail.offset = (index - Math.floor(thumbnails.length / 2)) * 2 + offsetAdjustment;
         });
       });
 
@@ -123,7 +124,7 @@ module.exports = [() => {
       })(thumbnailEl, $scope.thumbnails);
     },
     controller: ['$scope', ($scope) => {
-      $scope.thumbnails = [{},{},{},{},{},{},{},{},{},{},{},{},{}];
+      $scope.thumbnails = [{},{},{},{},{},{},{},{},{},{},{},{}];
     }]
   };
 }];
