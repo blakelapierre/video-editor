@@ -32,16 +32,24 @@ module.exports = [() => {
         });
       });
 
-      $scope.$watch('videoEl', () => {
-        videoEl = $scope.videoEl;
+      $scope.$watch('videoEl', (newEl, oldEl) => {
+        videoEl = newEl;
 
-        videoEl.addEventListener('pause', event => {
-          drawThumbnails();
-        });
+        if (oldEl) {
+          oldEl.removeEventListener('pause', pause);
+          oldEl.removeEventListener('timeupdate', timeupdate);
+        }
 
-        videoEl.addEventListener('timeupdate', event => {
-          if (videoEl.paused) drawThumbnails();
-        });
+        videoEl.addEventListener('pause', pause);
+        videoEl.addEventListener('timeupdate', timeupdate);
+
+        function pause() {
+          drawThumbnails(videoEl.currentTime);
+        }
+
+        function timeupdate() {
+          if (videoEl.paused) drawThumbnails(videoEl.currentTime);
+        }
       });
 
       $scope.gotoThumbnail = thumbnail => {
@@ -53,35 +61,38 @@ module.exports = [() => {
 
         thumbnailEl.addEventListener('seeked', seeked);
 
-        return () => {
-          let thumbnails = $scope.thumbnails,
-              time = videoEl.currentTime;
+        return time => {
+          let thumbnails = $scope.thumbnails;
 
           nextIndex = 0;
 
-          _.each(thumbnails, (thumbnail, index) => {
+          _.each(thumbnails, thumbnail => {
+            console.log(thumbnail);
             thumbnail.time = time + thumbnail.offset;
           });
 
-
           for (var i = 0; i < thumbnails.length; i++) {
             let t = thumbnails[i];
+
             if (t.time >= 0) break;
+
             t.context.clearRect(0, 0, t.canvas.width, t.canvas.height);
           }
 
           nextIndex = i;
 
-          if (nextIndex < thumbnails.length) thumbnailEl.currentTime = thumbnails[nextIndex].time;
+          if (nextIndex < thumbnails.length) {
+            thumbnailEl.currentTime = thumbnails[nextIndex].time;
+          }
         };
 
-        function seeked(event) {
+        function seeked() {
           let thumbnail = thumbnails[nextIndex],
               canvas = thumbnail.canvas,
               context = thumbnail.context;
 
-          let vw = videoEl.videoWidth,
-              vh = videoEl.videoHeight,
+          let vw = thumbnailEl.videoWidth,
+              vh = thumbnailEl.videoHeight,
               ratio = vw / vh;
 
           if (ratio > 1) {

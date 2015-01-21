@@ -59,7 +59,8 @@
   },
   "browserify-shim": {
     "angular": "global:angular",
-    "lodash": "global:_"
+    "lodash": "global:_",
+    "angular-sanitize": "global:angular"
   },
   "engines": {
     "node": ">=0.8.0"

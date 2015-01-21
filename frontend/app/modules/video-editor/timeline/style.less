@@ -18,12 +18,31 @@ timeline {
 
     canvas {
       width: 100%;
+
     }
 
     .time-offset {
       position: absolute;
       left: 0;
       bottom: 0;
+
+      width: 100%;
+
+      &.zero {
+        text-align: center;
+      }
+
+      &.positive {
+        span {
+          right: 0;
+        }
+
+        text-align: right;
+
+        &:before {
+          content: "+";
+        }
+      }
     }
   }
 }

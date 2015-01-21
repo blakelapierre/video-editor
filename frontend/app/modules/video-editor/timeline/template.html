@@ -1,7 +1,12 @@
-<video ng-src="{{video.src}}"
-       class="thumbnail-video"></video>
+<video ng-src="{{video.src}}" class="thumbnail-video"></video>
 <div ng-repeat="thumbnail in thumbnails track by $index"
      class="canvas-wrapper">
   <canvas class="thumbnail" width="0" height="0" ng-click="gotoThumbnail(thumbnail)"></canvas>
-  <span class="time-offset">{{thumbnail.offset}}</span>
+  <div ng-class="{
+                 'time-offset': true,
+                 'zero': thumbnail.offset == 0,
+                 positive: !(thumbnail.offset <= 0)
+                }">
+    <span contenteditable editable-type="{type: 'int', defualt: 0}" class="offset" ng-model="thumbnail.offset"></span>
+  </div>
 </div>
