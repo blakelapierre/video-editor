@@ -29,6 +29,8 @@ module.exports = [() => {
 
           thumbnail.offset = (index - Math.floor(thumbnails.length / 2)) * 2 + offsetAdjustment;
         });
+
+        if (videoEl) drawThumbnails(videoEl.currentTime);
       });
 
       $scope.$watch('videoEl', (newEl, oldEl) => {
@@ -125,6 +127,14 @@ module.exports = [() => {
     },
     controller: ['$scope', ($scope) => {
       $scope.thumbnails = [{},{},{},{},{},{},{},{},{},{},{},{}];
+
+      $scope.insertThumbnail = index => {
+        $scope.thumbnails.splice(index, 0, {});
+      };
+
+      $scope.removeThumbnail = index => {
+        $scope.thumbnails.splice(index, 1);
+      };
     }]
   };
 }];

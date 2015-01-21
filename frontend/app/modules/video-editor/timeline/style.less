@@ -7,7 +7,7 @@ timeline {
     display: none;
   }
 
-  .canvas-wrapper {
+  .thumbnail {
     position: relative;
 
     width: 20%;
@@ -21,29 +21,72 @@ timeline {
 
     }
 
-    .time-offset {
+    .overlay {
       position: absolute;
+
+      top: 0;
       left: 0;
-      bottom: 0;
 
       width: 100%;
+      height: 100%;
 
-      font-size: 0.65em;
+      cursor: pointer;
 
-      &.zero {
-        text-align: center;
+      &:hover {
+        .remove-thumbnail {
+          display: block;
+        }
+
+        .add-thumbnail {
+          display: block;
+        }
       }
 
-      &.positive {
-        span {
-          right: 0;
+      >* {
+        position: absolute;
+      }
+
+      .time-offset {
+        left: 0;
+        bottom: 0;
+
+        width: 100%;
+
+        font-size: 0.65em;
+
+        &.zero {
+          text-align: center;
         }
 
-        text-align: right;
+        &.positive {
+          .offset {
+            right: 0;
+          }
 
-        &:before {
-          content: "+";
+          text-align: right;
+
+          &:before {
+            content: "+";
+          }
         }
+      }
+
+      .remove-thumbnail {
+        display: none;
+
+        left: 0;
+        top: 0;
+
+        cursor: pointer;
+      }
+
+      .add-thumbnail {
+        display: none;
+
+        right: 0;
+        top: 0;
+
+        cursor: pointer;
       }
     }
   }
