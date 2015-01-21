@@ -12,7 +12,6 @@ module.exports = () => {
   };
 
   let publish = (() => {
-    console.log('publish');
     let canvas = document.createElement('canvas'),
         context = canvas.getContext('2d');
 

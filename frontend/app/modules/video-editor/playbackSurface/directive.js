@@ -12,9 +12,6 @@ module.exports = ['$sce', 'thumbnails', ($sce, thumbnails) => {
           video = angular.element(videoEl);
 
       $scope.videoEl = videoEl;
-      console.log($scope);
-
-      console.dir(videoEl);
 
       let lastWheelTime = new Date().getTime();
 
@@ -41,13 +38,8 @@ module.exports = ['$sce', 'thumbnails', ($sce, thumbnails) => {
         thumbnails.publish(videoEl);
       });
 
-      videoEl.addEventListener('past', event => {
+      videoEl.addEventListener('paste', event => {
         console.log('paste', event);
-      });
-
-      console.log('keypress');
-      element.on('keypress', event => {
-        console.log(event);
       });
 
       $scope.togglePlay = () => {
@@ -66,7 +58,6 @@ module.exports = ['$sce', 'thumbnails', ($sce, thumbnails) => {
     },
     controller: ['$scope', $scope => {
       $scope.$watch('file', () => {
-        console.log('watch', $scope.file);
         let file = $scope.file;
 
         if (file) {

@@ -12,7 +12,6 @@ module.exports = ['$sce', '$window', function($sce, $window) {
         ngModel.$parsers.unshift(transform);
         if (settings.type === 'int') {
           ngModel.$validators.number = (modelValue, viewValue) => {
-            console.log(typeof modelValue);
             return typeof modelValue === 'number';
           };
         }
@@ -42,7 +41,6 @@ module.exports = ['$sce', '$window', function($sce, $window) {
 
         ngModel.$setViewValue(html);
 
-        console.log(oldValue, ngModel.$valid);
         if (!ngModel.$valid) ngModel.$setViewValue(oldValue);
 
         ngModel.$render();
@@ -76,7 +74,6 @@ function attempt(fn, defaultValue) {
   let value = defaultValue;
   try {
     value = fn();
-    console.log(value);
   }
   catch (error) {
     value = defaultValue;

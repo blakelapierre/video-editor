@@ -48,8 +48,6 @@ module.exports = () => {
       });
     },
     controller: ['$scope', $scope => {
-      console.log('scope', $scope);
-
       let videoEl = $scope.videoEl;
 
       videoEl.addEventListener('timeupdate', event => {

@@ -27,8 +27,6 @@ module.exports = [() => {
           thumbnail.index = index;
 
           thumbnail.offset = (index - Math.floor(thumbnails.length / 2)) * 2;
-
-          console.log(thumbnail);
         });
       });
 
@@ -38,10 +36,12 @@ module.exports = [() => {
         if (oldEl) {
           oldEl.removeEventListener('pause', pause);
           oldEl.removeEventListener('timeupdate', timeupdate);
+          oldEl.removeEventListener('loadeddata', loadeddata);
         }
 
         videoEl.addEventListener('pause', pause);
         videoEl.addEventListener('timeupdate', timeupdate);
+        videoEl.addEventListener('loadeddata', loadeddata);
 
         function pause() {
           drawThumbnails(videoEl.currentTime);
@@ -49,6 +49,10 @@ module.exports = [() => {
 
         function timeupdate() {
           if (videoEl.paused) drawThumbnails(videoEl.currentTime);
+        }
+
+        function loadeddata() {
+          drawThumbnails(videoEl.currentTime);
         }
       });
 
@@ -67,7 +71,6 @@ module.exports = [() => {
           nextIndex = 0;
 
           _.each(thumbnails, thumbnail => {
-            console.log(thumbnail);
             thumbnail.time = time + thumbnail.offset;
           });
 
