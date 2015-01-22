@@ -8,10 +8,8 @@
                }">
   <canvas width="0" height="0"></canvas>
   <div class="overlay" ng-click="gotoThumbnail(thumbnail)" title="Jump {{thumbnail.offset}}s">
-    <div class="time-offset">
-      <span contenteditable editable-type="{type: 'int', defualt: 0}" class="offset" ng-model="thumbnail.offset" title="Edit Offset" ng-change="offsetChanged(thumbnail)"></span>
-    </div>
-    <span class="remove-thumbnail" ng-click="removeThumbnail($index)" title="Remove Thumbnail">-</span>
-    <span class="add-thumbnail" ng-click="insertThumbnail($index)" title="Add Thumbnail">+</span>
+    <div class="remove-thumbnail" ng-click="removeThumbnail($index)" title="Remove Thumbnail">-</div>
+    <div class="add-thumbnail" ng-click="insertThumbnail($index)" title="Add Thumbnail">+</div>
+    <div class="time-offset" contenteditable editable-type="{type: 'int', defualt: 0}" ng-model="thumbnail.offset" title="Edit Offset" ng-change="offsetChanged(thumbnail)"></div>
   </div>
 </div>

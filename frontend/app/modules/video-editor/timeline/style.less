@@ -12,30 +12,27 @@ timeline {
 
     width: 20%;
 
+    max-height: inherit;
+
     flex: 1 1 auto;
 
     align-self: center;
 
     &.pending {
       .overlay {
-        opacity: 0.5;
-        background-color: #000;
+        background-color: rgba(0, 0, 0, 0.5);
       }
     }
 
     &.zero {
       .time-offset {
-        text-align: center;
+        left: 50%;
       }
     }
 
     &.positive {
       .time-offset {
-        .offset {
-          right: 0;
-        }
-
-        text-align: right;
+        right: 0;
 
         &:before {
           content: "+";
@@ -61,10 +58,18 @@ timeline {
       &:hover {
         .remove-thumbnail {
           display: block;
+
+          &:hover {
+            text-shadow: 0px 0px 4px #000;
+          }
         }
 
         .add-thumbnail {
           display: block;
+
+          &:hover {
+            text-shadow: 0px 0px 4px #000;
+          }
         }
       }
 
@@ -73,12 +78,11 @@ timeline {
       }
 
       .time-offset {
-        left: 0;
         bottom: 0;
 
-        width: 100%;
-
         font-size: 0.65em;
+
+        cursor: text;
       }
 
       .remove-thumbnail {
@@ -86,6 +90,11 @@ timeline {
 
         left: 0;
         top: 0;
+
+        padding-left: 0.2em;
+        padding-right: 0.5em;
+
+        font-size: 2vw;
 
         cursor: pointer;
       }
@@ -95,6 +104,11 @@ timeline {
 
         right: 0;
         top: 0;
+
+        padding-right: 0.2em;
+        padding-left: 0.5em;
+
+        font-size: 2vw;
 
         cursor: pointer;
       }

@@ -1,0 +1,9 @@
+<h2>Filters</h2>
+<table>
+  <tr ng-repeat="filter in filters">
+    <td class="name">{{filter.name}}</td>
+    <td class="value"><input type="number" ng-model="filter.value" min="{{filter.min}}" max="{{filter.max}}"></td>
+    <td class="unit">{{filter.unit}}</td>
+  </tr>
+</table>
+<div class="reset" ng-click="reset()">Reset Filters</div>

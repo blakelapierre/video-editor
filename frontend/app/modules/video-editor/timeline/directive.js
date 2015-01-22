@@ -135,7 +135,7 @@ module.exports = [() => {
       })(thumbnailEl, $scope.thumbnails);
     },
     controller: ['$scope', ($scope) => {
-      $scope.thumbnails = [{},{},{},{},{},{},{},{},{},{},{},{}];
+      $scope.thumbnails = [{},{},{},{},{},{}];
 
       $scope.insertThumbnail = index => {
         $scope.thumbnails.splice(index, 0, {});

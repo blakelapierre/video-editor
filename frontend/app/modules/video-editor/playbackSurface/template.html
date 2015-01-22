@@ -1,5 +1,11 @@
+<div ng-show="video.src == null" class="teaser">
+  <span class="drop">Drop A File, yo!</span>
+  <span class="click">Or Click!</span>
+  <span class="paste">Or Paste!</span>
+  <span class="anywhere">[anywhere]</span>
+</div>
+<video ng-show="video.src != null" ng-src="{{video.src}}" ng-click="togglePlay()"></video>
+<filters-panel ng-show="video.src != null && showFilters"> </filters-panel>
 <div class="controls">
   <span>{{playbackRate}}</span>
 </div>
-<video ng-show="video.src != null" ng-src="{{video.src}}" ng-click="togglePlay()"></video>
-<div ng-show="video.src == null" class="teaser">Drop A File, yo!</div>

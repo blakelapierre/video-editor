@@ -57,6 +57,8 @@ module.exports = ['$sce', 'thumbnails', ($sce, thumbnails) => {
       };
     },
     controller: ['$scope', $scope => {
+      $scope.showFilters = true;
+
       $scope.$watch('file', () => {
         let file = $scope.file;
 

@@ -7,19 +7,49 @@
   }
 }
 
+@keyframes blow-up {
+  0% {
+    font-size: 0em;
+  }
+  100% {
+    font-size: 1em;
+  }
+}
+
+@keyframes fill {
+  0% {
+    font-size: 1vw;
+    transform: scale(0) rotateZ(0deg) rotateX(0deg);
+  }
+  66.6% {
+    font-size: 7vw;
+    transform: scale(4) rotateZ(720deg) rotateX(0deg);
+  }
+  93% {
+    font-size: 7vw;
+    transform: scale(4) rotateZ(720deg) rotateX(0deg);
+  }
+  100% {
+    font-size: 0vw;
+    transform: scale(0) rotateZ(0deg) rotateX(720deg);
+  }
+}
+
 playback-surface {
   display: flex;
 
   video {
     max-width: 100%;
 
-    flex: 1;
+    flex: 4 1 auto;
 
     animation: appear 0.5s ease-in;
   }
 
   .controls {
     position: absolute;
+    top: 0;
+    left: 0;
 
     color: #fff;
   }
@@ -32,5 +62,34 @@ playback-surface {
     align-self: center;
 
     text-align: center;
+
+    >span {
+      display: block;
+      margin: 1em;
+    }
+
+    .drop {
+      animation: blow-up 1s 0.15s linear;
+      animation-fill-mode: both;
+    }
+
+    .click {
+      animation: blow-up 1s 3.15s linear;
+      animation-fill-mode: both;
+    }
+
+    .paste {
+      animation: blow-up 1s 5.15s linear;
+      animation-fill-mode: both;
+    }
+
+    .anywhere {
+      animation: fill 4s 7.15s cubic-bezier(1, 0, 0, 1);
+      animation-fill-mode: both;
+    }
+  }
+
+  filters-panel {
+    flex: 1 0 auto;
   }
 }

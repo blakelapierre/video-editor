@@ -6,26 +6,25 @@ module.exports = ['$sce', $sce => {
       $scope.video = {src: undefined};
 
       $scope.receivedPaste = $event => {
-        console.log($event.clipboardData.getData('text/plain'));
+        console.log($event, $event.clipboardData.getData('text/plain'));
       };
 
       $scope.editorClicked = () => {
         if (!$scope.file) $scope.promptForFile();
       };
 
+
       $scope.promptForFile = () => {
-        $scope.promptForFile = () => {
-          var input = document.createElement('input');
-          input.type = 'file';
+        var input = document.createElement('input');
+        input.type = 'file';
 
-          angular.element(input).bind('change', event => {
-            $scope.$apply(() => {
-              $scope.file = event.target.files[0];
-            });
+        angular.element(input).bind('change', event => {
+          $scope.$apply(() => {
+            $scope.file = event.target.files[0];
           });
+        });
 
-          input.click();
-        };
+        input.click();
       };
     }]
   };
