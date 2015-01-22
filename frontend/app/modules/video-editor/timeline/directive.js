@@ -23,6 +23,8 @@ module.exports = [() => {
           canvas.width = canvas.parentNode.clientWidth;
           canvas.height = canvas.width * 9 / 16;
 
+          canvas.style['-webkit-filter'] = $scope.videoElFilterStyle;
+
           thumbnail.canvas = canvas;
           thumbnail.context = context;
           thumbnail.index = index;
@@ -56,6 +58,14 @@ module.exports = [() => {
 
         function loadeddata() {
           drawThumbnails(videoEl.currentTime);
+        }
+      });
+
+      $scope.$watch('videoElFilterStyle', (newStyle) => {
+        if ($scope.thumbnails) {
+          _.each($scope.thumbnails, thumbnail => {
+            thumbnail.canvas.style['-webkit-filter'] = newStyle;
+          });
         }
       });
 

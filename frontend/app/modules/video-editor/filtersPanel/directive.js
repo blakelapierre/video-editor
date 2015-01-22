@@ -28,7 +28,8 @@ module.exports = () => {
       $scope.$watch('filters', () => applyFilters(), true);
 
       function applyFilters() {
-        videoEl.style['-webkit-filter'] = getFilterStyle();
+        let style = getFilterStyle();
+        videoEl.style['-webkit-filter'] = $scope.videoElFilterStyle = style;
       }
 
       function getFilterStyle() {
@@ -78,8 +79,7 @@ let filters = [{
   name: 'sepia',
   value: 0,
   unit: '%',
-  min: 0,
-  max: 100
+  min: 0
 },{
   name: 'invert',
   value: 0,
