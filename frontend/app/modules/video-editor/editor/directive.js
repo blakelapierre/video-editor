@@ -20,7 +20,6 @@ module.exports = ['$sce', $sce => {
         angular.element(input).bind('change', event => {
           $scope.$apply(() => {
             $scope.file = event.target.files[0];
-            console.log('f', $scope.file);
           });
         });
 

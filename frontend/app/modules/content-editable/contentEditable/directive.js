@@ -18,7 +18,6 @@ module.exports = ['$sce', '$window', function($sce, $window) {
         else if (settings.type === 'number') {
           ngModel.$parsers.unshift(transformFloat);
           ngModel.$validators.number = (modelValue, viewValue) => {
-            console.log('validating', modelValue, viewValue);
             return typeof modelValue === 'number';
           };
         }
@@ -31,7 +30,6 @@ module.exports = ['$sce', '$window', function($sce, $window) {
       });
 
       ngModel.$render = () => {
-        console.log('render', ngModel);
         element.html($sce.getTrustedHtml(ngModel.$viewValue));
       };
 
@@ -40,8 +38,6 @@ module.exports = ['$sce', '$window', function($sce, $window) {
       function read() {
         let html = element.html(),
             oldValue = ngModel.$viewValue;
-
-            console.log('html', html, ngModel);
 
         // When we clear the content editable the browser leaves a <br> behind
         // If strip-br attribute is provided then we strip this out
@@ -57,13 +53,11 @@ module.exports = ['$sce', '$window', function($sce, $window) {
       }
 
       function transformInt(value) {
-        console.log('transforming int', value, settings);
         value = parseInt(value, 10);
         return isNaN(value) ? settings['default'] : value;
       }
 
       function transformFloat(value) {
-        console.log('transforming float', arguments, value, settings);
         value = parseFloat(value);
         return isNaN(value) ? settings['default'] : value;
       }

@@ -18,7 +18,6 @@ module.exports = ['$sce', 'thumbnails', ($sce, thumbnails) => {
       let lastWheelTime = new Date().getTime();
 
       video.on('wheel', event => {
-        console.log(event);
         let time = new Date().getTime(),
             dt = time - lastWheelTime;
 
@@ -60,9 +59,6 @@ module.exports = ['$sce', 'thumbnails', ($sce, thumbnails) => {
     },
     controller: ['$scope', $scope => {
       $scope.showFilters = true;
-
-      console.log('scope', $scope);
-
     }]
   };
 }];
