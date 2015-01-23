@@ -4,6 +4,44 @@ module.exports = () => {
   return {
     restrict: 'E',
     template: require('./template.html'),
+    link: ($scope, element, attributes) => {
+      let table = element.find('table'),
+          tbody = table.find('tbody')
+
+      $scope.$watchCollection('filters', (newValue, oldValue) => {
+        let rows = tbody.children();
+
+        _.each(_.zip([rows, newValue]), pair => {
+          let [row, filter] = pair;
+
+          row.addEventListener('wheel', event => debouncedApply(wheel(event, filter)));
+        });
+
+        function wheel(event, filter) {
+          event.stopPropagation();
+          event.preventDefault();
+
+
+          let deltaY = event.wheelDeltaY,
+              {value, min, max} = filter;
+
+          if (deltaY < 0) {
+            filter.value = clamp(value - 1, min, max);
+          }
+          else if (deltaY > 0) {
+            filter.value = clamp(value + 1, min, max);
+          }
+        }
+
+        function clamp(value, min, max) {
+          min = min === undefined ? Number.NEGATIVE_INFINITY : min;
+          max = max === undefined ? Number.POSITIVE_INFINITY : max;
+          return Math.min(Math.max(min, value), max);
+        }
+      });
+
+      let debouncedApply = _.debounce(fn => $scope.$apply(fn), 10);
+    },
     controller: ['$scope', $scope => {
       let videoEl;
 
@@ -34,8 +72,10 @@ module.exports = () => {
 
       function getFilterStyle() {
         return _.map(filters, filter => {
-          if (filter.value != undefined) {
-            return filter.name + '(' + filter.value + filter.unit + ')';
+          let {name, value, unit} = filter;
+
+          if (value != undefined) {
+            return name + '(' + value + unit + ')';
           }
           return '';
         }).join(' ');

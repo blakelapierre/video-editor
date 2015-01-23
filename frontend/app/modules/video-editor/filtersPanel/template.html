@@ -1,6 +1,6 @@
 <div class="header">Filters</div>
 <table>
-  <tr ng-repeat="filter in filters">
+  <tr ng-repeat="filter in filters" class="row">
     <td class="name">{{filter.name}}</td>
     <td class="value"><input type="number" ng-model="filter.value" min="{{filter.min}}" max="{{filter.max}}"></td>
     <td class="unit">{{filter.unit}}</td>
