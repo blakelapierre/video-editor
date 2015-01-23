@@ -1,3 +1,14 @@
-<playback-surface></playback-surface>
-<position-bar ng-show="video.src"></position-bar>
-<timeline ng-if="video.src"></timeline>
+<div ng-if="video.src != null" class="has-video">
+  <div class="divider">
+    <playback-surface></playback-surface>
+    <filters-panel></filters-panel>
+  </div>
+  <position-bar></position-bar>
+  <timeline></timeline>
+</div>
+<div class="teaser" ng-if="video.src == null">
+  <span class="drop">Drop A File, yo!</span>
+  <span class="click">Or Click!</span>
+  <span class="paste">Or Paste!</span>
+  <span class="anywhere">[anywhere]</span>
+</div>

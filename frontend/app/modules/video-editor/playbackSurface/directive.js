@@ -9,13 +9,16 @@ module.exports = ['$sce', 'thumbnails', ($sce, thumbnails) => {
     // },
     link: ($scope, element, attributes) => {
       let videoEl = element.find('video')[0],
-          video = angular.element(videoEl);
+          overlayEl = element.find('.overlay')[0],
+          video = angular.element(videoEl),
+          overlay = angular.element(overlayEl);
 
       $scope.videoEl = videoEl;
 
       let lastWheelTime = new Date().getTime();
 
       video.on('wheel', event => {
+        console.log(event);
         let time = new Date().getTime(),
             dt = time - lastWheelTime;
 
@@ -28,7 +31,7 @@ module.exports = ['$sce', 'thumbnails', ($sce, thumbnails) => {
         }
 
         if (delta !== 0) {
-          $scope.setPlaybackRate(Math.min(5, Math.max(0, videoEl.playbackRate + delta)));
+          $scope.$apply(() => $scope.setPlaybackRate(Math.min(5, Math.max(0, videoEl.playbackRate + delta))));
         }
 
         lastWheelTime = time;
@@ -47,29 +50,19 @@ module.exports = ['$sce', 'thumbnails', ($sce, thumbnails) => {
         else videoEl.pause();
       };
 
-      $scope.playbackRate = videoEl.playbackRate;
       $scope.setPlaybackRate = rate => {
+        rate = rate || 1;
         videoEl.playbackRate = rate;
-        if (rate > 1) $scope.playbackRate = rate + ' : 1';
-        else if (rate < 1) $scope.playbackRate = '1 : ' + (1/rate);
-        else $scope.playbackRate = '1 : 1';
-        $scope.$apply();
+        $scope.playbackRate = rate < 0.001 ? rate.toFixed(5) : rate.toFixed(3);
       };
+
+      $scope.setPlaybackRate(videoEl.playbackRate);
     },
     controller: ['$scope', $scope => {
       $scope.showFilters = true;
 
-      $scope.$watch('file', () => {
-        let file = $scope.file;
+      console.log('scope', $scope);
 
-        if (file) {
-          let type = file.type;
-
-          if (type.indexOf('video') === 0) {
-            $scope.video.src = $sce.trustAsResourceUrl(URL.createObjectURL(file));
-          }
-        }
-      });
     }]
   };
 }];

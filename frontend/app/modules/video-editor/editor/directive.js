@@ -13,7 +13,6 @@ module.exports = ['$sce', $sce => {
         if (!$scope.file) $scope.promptForFile();
       };
 
-
       $scope.promptForFile = () => {
         var input = document.createElement('input');
         input.type = 'file';
@@ -21,11 +20,24 @@ module.exports = ['$sce', $sce => {
         angular.element(input).bind('change', event => {
           $scope.$apply(() => {
             $scope.file = event.target.files[0];
+            console.log('f', $scope.file);
           });
         });
 
         input.click();
       };
+
+      $scope.$watch('file', () => {
+        let file = $scope.file;
+
+        if (file) {
+          let type = file.type;
+
+          if (type.indexOf('video') === 0) {
+            $scope.video.src = $sce.trustAsResourceUrl(URL.createObjectURL(file));
+          }
+        }
+      });
     }]
   };
 }];
