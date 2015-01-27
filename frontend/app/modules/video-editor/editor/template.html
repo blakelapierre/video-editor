@@ -1,7 +1,7 @@
 <div ng-if="video.src != null" class="has-video">
   <div class="divider">
     <playback-surface></playback-surface>
-    <filters-panel></filters-panel>
+    <filters-panel ng-hide="hideFilters"></filters-panel>
   </div>
   <position-bar></position-bar>
   <timeline></timeline>

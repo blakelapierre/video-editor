@@ -12,6 +12,7 @@ module.exports = {
     .directive('number', require('./modules/inputs/number/directive'))
   ,
   'video-editor': angular.module('video-editor', ['drag-and-drop', 'content-editable', 'inputs'])
+    .directive('audioPanel',           require('./modules/video-editor/audio-panel/directive'))
     .directive('editor',          require('./modules/video-editor/editor/directive'))
     .directive('filtersPanel',    require('./modules/video-editor/filtersPanel/directive'))
     .directive('playbackSurface', require('./modules/video-editor/playbackSurface/directive'))

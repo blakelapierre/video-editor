@@ -1,48 +1,76 @@
-module.exports = ['$sce', 'thumbnails', ($sce, thumbnails) => {
+let wheelHandlers = {
+  playbackSpeed: (() => {
+    let maxPlaybackRate = 100,
+        minPlaybackRate = 0.0000001,
+        lastWheelTime = new Date().getTime();
+
+    return ($scope, videoEl, event) => {
+      let time = new Date().getTime(),
+          dt = time - lastWheelTime,
+          currentRate = videoEl.playbackRate || minPlaybackRate;
+
+      let delta = 0;
+      if (event.deltaY > 0) {
+        delta = -0.001 * (1000 / clamp(dt, 1000, 0)) * currentRate;
+      }
+      else if (event.deltaY < 0) {
+        delta = 0.001 * (1000 / clamp(dt, 1000, 0)) * currentRate;
+      }
+
+      if (delta !== 0) {
+        let newRate = currentRate + delta;
+        $scope.$apply(() => $scope.setPlaybackRate(clamp(newRate, maxPlaybackRate, minPlaybackRate)));
+      }
+
+      lastWheelTime = time;
+    };
+  })(),
+  zoom: (() => {
+    let lastWheelTime = new Date().getTime();
+
+    return ($scope, videoEl, event) => {
+      let time = new Date().getTime(),
+          dt = time - lastWheelTime,
+          currentRate = videoEl.playbackRate || minPlaybackRate;
+
+      let delta = 0;
+      if (event.deltaY > 0) {
+        delta = -0.001 * (1000 / clamp(dt, 1000, 0)) * currentRate;
+      }
+      else if (event.deltaY < 0) {
+        delta = 0.001 * (1000 / clamp(dt, 1000, 0)) * currentRate;
+      }
+
+      if (delta !== 0) {
+        let newRate = currentRate + delta;
+        $scope.$apply(() => $scope.setPlaybackRate(clamp(newRate, maxPlaybackRate, minPlaybackRate)));
+      }
+
+      lastWheelTime = time;
+    };
+  })()
+};
+
+console.log(wheelHandlers);
+
+module.exports = [() => {
   return {
     restrict: 'E',
-   // replace: true,
     template: require('./template.html'),
-    // scope: {
-    //   file: '=',
-    //   video: '='
-    // },
     link: ($scope, element, attributes) => {
       let videoEl = element.find('video')[0],
-          overlayEl = element.find('.overlay')[0],
+          overlayEl = element.find('div')[0],
+          currentMode = 'playbackSpeed',
           video = angular.element(videoEl),
           overlay = angular.element(overlayEl);
 
       $scope.videoEl = videoEl;
 
-      let lastWheelTime = new Date().getTime();
+      overlayEl.addEventListener('wheel', wheel);
 
-      video.on('wheel', event => {
-        let time = new Date().getTime(),
-            dt = time - lastWheelTime;
-
-        let delta = 0;
-        if (event.deltaY > 0) {
-          delta = -0.001 * (1000 / dt);
-        }
-        else if (event.deltaY < 0) {
-          delta = 0.001 * (1000 / dt);
-        }
-
-        if (delta !== 0) {
-          $scope.$apply(() => $scope.setPlaybackRate(Math.min(5, Math.max(0, videoEl.playbackRate + delta))));
-        }
-
-        lastWheelTime = time;
-      });
-
-      videoEl.addEventListener('pause', event => {
-        thumbnails.publish(videoEl);
-      });
-
-      videoEl.addEventListener('paste', event => {
-        console.log('paste', event);
-      });
+      function wheel(event) {
+        wheelHandlers[currentMode]($scope, videoEl, event);
+      }
 
       $scope.togglePlay = () => {
         if (videoEl.paused) videoEl.play();
@@ -50,9 +78,19 @@ module.exports = ['$sce', 'thumbnails', ($sce, thumbnails) => {
       };
 
       $scope.setPlaybackRate = rate => {
-        rate = rate || 1;
+        if (rate === undefined) rate = 1;
+
         videoEl.playbackRate = rate;
-        $scope.playbackRate = rate < 0.001 ? rate.toFixed(5) : rate.toFixed(3);
+        if      (rate < 0.0005) rate = rate.toFixed(7);
+        else if (rate < 0.005) rate = rate.toFixed(6);
+        else if (rate < 0.05) rate = rate.toFixed(5);
+        else if (rate < 0.5) rate = rate.toFixed(4);
+        else rate = rate.toFixed(3);
+        $scope.playbackRate = rate;
+      };
+
+      $scope.createMediaElementSource = context => {
+        return context.createMediaElementSource(videoEl);
       };
 
       $scope.setPlaybackRate(videoEl.playbackRate);
@@ -62,3 +100,7 @@ module.exports = ['$sce', 'thumbnails', ($sce, thumbnails) => {
     }]
   };
 }];
+
+function clamp(value, max, min) {
+  return Math.min(max, Math.max(min, value));
+}

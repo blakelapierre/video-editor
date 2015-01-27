@@ -52,6 +52,7 @@ module.exports = [() => {
           drawThumbnails(videoEl.currentTime);
         }
 
+        // This can be called around the same time as pause(), potentially causing problems
         function timeupdate() {
           if (videoEl.paused) drawThumbnails(videoEl.currentTime);
         }
@@ -83,6 +84,7 @@ module.exports = [() => {
         thumbnailEl.addEventListener('seeked', seeked);
 
         return time => {
+          console.log('draw');
           let thumbnails = $scope.thumbnails;
 
           nextIndex = 0;
@@ -101,6 +103,7 @@ module.exports = [() => {
           }
 
           nextIndex = i;
+          console.log(nextIndex);
 
           if (nextIndex < thumbnails.length) {
             thumbnailEl.currentTime = thumbnails[nextIndex].time;
@@ -108,6 +111,7 @@ module.exports = [() => {
         };
 
         function seeked() {
+          console.log('seeked');
           let thumbnail = thumbnails[nextIndex],
               canvas = thumbnail.canvas,
               context = thumbnail.context;
@@ -135,6 +139,7 @@ module.exports = [() => {
           thumbnail.pending = false;
 
           nextIndex++;
+          console.log('inc\'d', nextIndex);
           if (nextIndex < thumbnails.length) {
             let thumbnail = thumbnails[nextIndex];
             thumbnailEl.currentTime = thumbnail.time;

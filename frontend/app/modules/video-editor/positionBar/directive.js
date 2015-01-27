@@ -50,9 +50,8 @@ module.exports = () => {
     controller: ['$scope', $scope => {
       let videoEl = $scope.videoEl;
 
-      videoEl.addEventListener('timeupdate', event => {
-        $scope.time();
-      });
+      videoEl.addEventListener('timeupdate', () => $scope.time());
+      videoEl.addEventListener('loadeddata', () => $scope.time());
 
       $scope.time = () => {
         $scope.$apply(() => {

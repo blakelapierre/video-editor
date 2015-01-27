@@ -12,28 +12,38 @@ playback-surface {
 
   display: flex;
 
-  video {
-    max-width: 100%;
+  perspective: 700px;
 
+  overflow: hidden;
+
+  video {
     flex: 4 1 auto;
 
     animation: appear 0.5s ease-in;
   }
 
-  .playback-rate {
+  .overlay {
     position: absolute;
-
+    top: 0;
+    left: 0;
     right: 0;
     bottom: 0;
 
-    color: #fff;
+    .playback-rate {
+      position: absolute;
 
-    .rate {
-      font-size: 0.75em;
-    }
+      right: 0;
+      bottom: 0;
 
-    .x {
-      font-size: 0.5em;
+      color: #fff;
+
+      .rate {
+        font-size: 0.75em;
+      }
+
+      .x {
+        font-size: 0.5em;
+      }
     }
   }
 }

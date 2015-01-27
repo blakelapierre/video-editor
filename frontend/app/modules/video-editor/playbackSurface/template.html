@@ -1,5 +1,14 @@
-<video ng-show="video.src != null" ng-src="{{video.src}}" ng-click="togglePlay()"></video>
-<div class="playback-rate">
-  <span class="rate">{{playbackRate}}</span>
-  <span class="x">X</span>
+<video
+      ng-show="video.src != null"
+      ng-src="{{video.src}}"
+      width="100%"
+      height="auto"></video>
+<div
+    class="overlay"
+    ng-click="togglePlay()">
+  <audio-panel></audio-panel>
+  <div class="playback-rate">
+    <span class="rate">{{playbackRate}}</span>
+    <span class="x">X</span>
+  </div>
 </div>
