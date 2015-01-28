@@ -22,14 +22,14 @@ module.exports = () => {
           event.preventDefault();
 
 
-          let deltaY = event.wheelDeltaY,
+          let deltaY = event.deltaY,
               {value, min, max} = filter;
 
           if (deltaY < 0) {
-            filter.value = clamp(value - 1, min, max);
+            filter.value = clamp(value + 1, min, max);
           }
           else if (deltaY > 0) {
-            filter.value = clamp(value + 1, min, max);
+            filter.value = clamp(value - 1, min, max);
           }
         }
 
@@ -68,6 +68,7 @@ module.exports = () => {
       function applyFilters() {
         let style = getFilterStyle();
         videoEl.style['-webkit-filter'] = $scope.videoElFilterStyle = style;
+        videoEl.style['filter'] = $scope.videoElFilterStyle = style;
       }
 
       function getFilterStyle() {

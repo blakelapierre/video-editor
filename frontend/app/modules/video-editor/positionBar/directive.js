@@ -3,9 +3,10 @@ module.exports = () => {
     restrict: 'E',
     template: require('./template.html'),
     link: ($scope, element, attributes) => {
-      element.on('click', event => {
-        let el = element[0],
-            videoEl = $scope.videoEl,
+      let el = element[0];
+
+      el.addEventListener('click', event => {
+        let videoEl = $scope.videoEl,
             position = (event.clientX - el.clientLeft) / el.clientWidth;
 
         if (videoEl.duration > 0) {
@@ -16,7 +17,7 @@ module.exports = () => {
       });
 
       let lastWheelTime = new Date().getTime();
-      element.on('mousewheel', event => {
+      el.addEventListener('wheel', event => {
         let el = element[0],
             videoEl = $scope.videoEl,
             deltaY = event.deltaY,

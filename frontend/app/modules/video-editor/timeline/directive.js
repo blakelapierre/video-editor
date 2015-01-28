@@ -66,6 +66,7 @@ module.exports = [() => {
         if ($scope.thumbnails) {
           _.each($scope.thumbnails, thumbnail => {
             thumbnail.canvas.style['-webkit-filter'] = newStyle;
+            thumbnail.canvas.style['filter'] = newStyle;
           });
         }
       });
