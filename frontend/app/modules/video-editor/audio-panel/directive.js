@@ -16,7 +16,6 @@ module.exports = () => {
 
       $scope.$watch('videoEl', newEl => {
         videoEl = newEl;
-        console.log('videoEl', videoEl);
 
         let audioSource = $scope.createMediaElementSource(audioContext);
 
@@ -28,7 +27,6 @@ module.exports = () => {
         videoEl.addEventListener('play', visualize);
 
         function visualize() {
-          console.log('visualizing', analyser);
           analyser.fftSize = 2048;
 
           let bufferLength = analyser.fftSize,

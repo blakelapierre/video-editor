@@ -51,8 +51,6 @@ let wheelHandlers = {
   })()
 };
 
-console.log(wheelHandlers);
-
 module.exports = [() => {
   return {
     restrict: 'E',
