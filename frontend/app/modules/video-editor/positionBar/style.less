@@ -33,7 +33,9 @@ position-bar {
 
       line-height: 1em;
 
-      transition: all @duration linear, width 0;
+      transition: box-shadow @duration linear,
+                  font-size @duration linear,
+                  line-height @duration linear;
     }
   }
 
@@ -63,7 +65,9 @@ position-bar {
 
     box-shadow: inset -1px 1px 3px -1px rgba(255, 255, 255, 128);
 
-    transition: all @duration linear, width 0;
+    transition: box-shadow @duration linear,
+                font-size @duration linear,
+                line-height @duration linear;
 
     .surface-overlay {
       display: none;

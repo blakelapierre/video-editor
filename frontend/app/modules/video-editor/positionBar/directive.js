@@ -5,21 +5,40 @@ module.exports = () => {
     link: ($scope, element, attributes) => {
       let el = element[0];
 
-      el.addEventListener('click', event => {
-        let videoEl = $scope.videoEl,
-            position = (event.clientX - el.clientLeft) / el.clientWidth;
+      let button = 0;
+      el.addEventListener('mousedown', event => {
+        if (event.button === 0) {
+          button++;
 
-        if (videoEl.duration > 0) {
-          videoEl.currentTime = position * videoEl.duration;
-          $scope.time();
+          let videoEl = $scope.videoEl,
+              position = event.clientX / (el.clientLeft + el.clientWidth);
+
+          if (videoEl.duration > 0) {
+            videoEl.currentTime = position * videoEl.duration;
+            $scope.time();
+          }
         }
+      });
 
+      el.addEventListener('mouseup', event => {
+        if (event.button === 0) button--;
+      });
+
+      el.addEventListener('mousemove', event => {
+        if (button > 0) {
+          let videoEl = $scope.videoEl,
+              position = event.clientX / (el.clientLeft + el.clientWidth);
+
+          if (videoEl.duration > 0) {
+            videoEl.currentTime = position * videoEl.duration;
+            $scope.time();
+          }
+        }
       });
 
       let lastWheelTime = new Date().getTime();
       el.addEventListener('wheel', event => {
-        let el = element[0],
-            videoEl = $scope.videoEl,
+        let videoEl = $scope.videoEl,
             deltaY = event.deltaY,
             swapDirection = $scope.swapDirection > 0 ? -1 : 1,
             time = new Date().getTime(),
