@@ -148,20 +148,29 @@ module.exports = ['on', 'off', (on, off) => {
       })(thumbnailEl, $scope.thumbnails);
 
       function wheel(event) {
-        let deltaY = event.deltaY;
+        let time = videoEl.currentTime,
+            duration = videoEl.duration,
+            deltaY = event.deltaY,
+            thumbnails = $scope.thumbnails,
+            firstThumbnail = thumbnails[0],
+            lastThumbnail = thumbnails[thumbnails.length - 1];
 
         $scope.$apply(() => {
           if (deltaY > 0) {
-            _.each($scope.thumbnails, (thumbnail, index) => {
+            _.each(thumbnails, (thumbnail, index) => {
               thumbnail.offset *= 2;
             });
           }
           else if (deltaY < 0) {
-           _.each($scope.thumbnails, (thumbnail, index) => {
+           _.each(thumbnails, (thumbnail, index) => {
               thumbnail.offset /= 2;
             });
           }
-          drawThumbnails(videoEl.currentTime);
+
+          drawThumbnails(time);
+
+          $scope.timelineWidth = clamp(100 * (lastThumbnail.time - firstThumbnail.time) / duration, 0, 100);
+          $scope.timelineLeft = clamp(100 * (time + firstThumbnail.offset) / duration, 0, 100);
         });
       }
     },
@@ -178,3 +187,9 @@ module.exports = ['on', 'off', (on, off) => {
     }]
   };
 }];
+
+function clamp(value, min, max) {
+  min = min === undefined ? Number.NEGATIVE_INFINITY : min;
+  max = max === undefined ? Number.POSITIVE_INFINITY : max;
+  return Math.min(Math.max(min, value), max);
+}

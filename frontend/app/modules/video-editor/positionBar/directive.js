@@ -37,7 +37,8 @@ module.exports = ['on', (on) => {
 
       let lastWheelTime = new Date().getTime();
       function wheel(event) {
-        let deltaY = event.deltaY,
+        let videoEl = $scope.videoEl,
+            deltaY = event.deltaY,
             swapDirection = $scope.swapDirection > 0 ? -1 : 1,
             time = new Date().getTime(),
             dt = time - lastWheelTime;
@@ -53,7 +54,7 @@ module.exports = ['on', (on) => {
         lastWheelTime = time;
 
         $scope.incrementCurrentTime(swapDirection * delta);
-        $scope.time();
+        $scope.updateBar(videoEl.currentTime);
       }
 
       function seekToBarPosition(event) {

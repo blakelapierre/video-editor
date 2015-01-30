@@ -32,12 +32,6 @@ module.exports = () => {
             filter.value = clamp(value - 1, min, max);
           }
         }
-
-        function clamp(value, min, max) {
-          min = min === undefined ? Number.NEGATIVE_INFINITY : min;
-          max = max === undefined ? Number.POSITIVE_INFINITY : max;
-          return Math.min(Math.max(min, value), max);
-        }
       });
 
       let debouncedApply = _.debounce(fn => $scope.$apply(fn), 10);
@@ -135,3 +129,9 @@ let filters = [{
 },{
   name: 'drop-shadow'
 }];
+
+function clamp(value, min, max) {
+  min = min === undefined ? Number.NEGATIVE_INFINITY : min;
+  max = max === undefined ? Number.POSITIVE_INFINITY : max;
+  return Math.min(Math.max(min, value), max);
+}
