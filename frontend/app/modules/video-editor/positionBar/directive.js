@@ -1,45 +1,43 @@
-module.exports = () => {
+let _ = require('lodash');
+
+module.exports = ['on', (on) => {
   return {
     restrict: 'E',
     template: require('./template.html'),
     link: ($scope, element, attributes) => {
       let el = element[0];
 
+      on(el, {mousedown, mouseup, mousemove, wheel});
+
+      // Need a better way to put this in the markup
+      $scope.$watch('pinned', pinned => {
+        if (pinned) element.addClass('pinned');
+        else element.removeClass('pinned');
+      });
+
       let button = 0;
-      el.addEventListener('mousedown', event => {
+      function mousedown(event) {
         if (event.button === 0) {
           button++;
-
-          let videoEl = $scope.videoEl,
-              position = event.clientX / (el.clientLeft + el.clientWidth);
-
-          if (videoEl.duration > 0) {
-            videoEl.currentTime = position * videoEl.duration;
-            $scope.time();
-          }
+          seekToBarPosition(event);
         }
-      });
+      }
 
-      el.addEventListener('mouseup', event => {
-        if (event.button === 0) button--;
-      });
+      function mouseup(event) {
+        if (event.button === 0) {
+          button--;
+        }
+      }
 
-      el.addEventListener('mousemove', event => {
+      function mousemove(event) {
         if (button > 0) {
-          let videoEl = $scope.videoEl,
-              position = event.clientX / (el.clientLeft + el.clientWidth);
-
-          if (videoEl.duration > 0) {
-            videoEl.currentTime = position * videoEl.duration;
-            $scope.time();
-          }
+          seekToBarPosition(event);
         }
-      });
+      }
 
       let lastWheelTime = new Date().getTime();
-      el.addEventListener('wheel', event => {
-        let videoEl = $scope.videoEl,
-            deltaY = event.deltaY,
+      function wheel(event) {
+        let deltaY = event.deltaY,
             swapDirection = $scope.swapDirection > 0 ? -1 : 1,
             time = new Date().getTime(),
             dt = time - lastWheelTime;
@@ -54,43 +52,49 @@ module.exports = () => {
 
         lastWheelTime = time;
 
-        if (videoEl.duration > 0) {
-          videoEl.currentTime += swapDirection * delta;
-          $scope.time();
-        }
-      });
+        $scope.incrementCurrentTime(swapDirection * delta);
+        $scope.time();
+      }
 
-      $scope.$watch('pinned', event => {
-        let pinned = $scope.pinned;
+      function seekToBarPosition(event) {
+        let videoEl = $scope.videoEl,
+            position = event.clientX / (el.clientLeft + el.clientWidth);
 
-        if (pinned) element.addClass('pinned');
-        else element.removeClass('pinned');
-      });
+        setCurrentTime(position * videoEl.duration);
+      }
+
+      function setCurrentTime(time) {
+        $scope.setCurrentTime(time);
+        $scope.updateBar(time);
+      }
     },
     controller: ['$scope', $scope => {
-      let videoEl = $scope.videoEl;
+      let videoEl = $scope.videoEl,
+          currentTime;
 
-      videoEl.addEventListener('timeupdate', () => $scope.time());
-      videoEl.addEventListener('loadeddata', () => $scope.time());
+      $scope.updateBar = time => {
+        if (time !== currentTime) {
+          currentTime = time;
+          $scope.$apply(() => {
+            let duration = videoEl.duration,
+                thumbnails= $scope.thumbnails,
+                firstThumbnail = thumbnails[0],
+                lastThumbnail = thumbnails[thumbnails.length - 1];
 
-      $scope.time = () => {
-        $scope.$apply(() => {
-          let currentTime = videoEl.currentTime,
-              duration = videoEl.duration,
-              thumbnails= $scope.thumbnails,
-              firstThumbnail = thumbnails[0],
-              lastThumbnail = thumbnails[thumbnails.length - 1];
-
-          $scope.currentTime = formatTime(currentTime);
-          $scope.remainingTime = formatTime(duration - currentTime);
-          $scope.currentPercent = 100 * (currentTime / duration);
-          $scope.timelineWidth = 100 * (lastThumbnail.time - firstThumbnail.time) / duration;
-          $scope.timelineLeft = 100 * (currentTime + firstThumbnail.offset) / duration;
-        });
+            $scope.currentTime = formatTime(time);
+            $scope.remainingTime = formatTime(duration - time);
+            $scope.currentPercent = 100 * (time / duration);
+            $scope.timelineWidth = 100 * (lastThumbnail.time - firstThumbnail.time) / duration;
+            $scope.timelineLeft = 100 * (time + firstThumbnail.offset) / duration;
+          });
+        }
       };
+
+      videoEl.addEventListener('timeupdate', () => $scope.updateBar(videoEl.currentTime));
+      videoEl.addEventListener('loadeddata', () => $scope.updateBar(videoEl.currentTime));
     }]
   };
-};
+}];
 
 function formatTime(timeInSeconds) {
   let time = timeInSeconds,

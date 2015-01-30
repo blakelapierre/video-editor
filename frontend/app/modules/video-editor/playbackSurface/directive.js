@@ -64,7 +64,37 @@ module.exports = [() => {
 
       $scope.videoEl = videoEl;
 
+      videoEl.addEventListener('loadeddata', loadeddata);
+      videoEl.addEventListener('loadedmetadata', loadedmetadata);
+      videoEl.addEventListener('loadstart', loadstart);
+      videoEl.addEventListener('error', error);
       overlayEl.addEventListener('wheel', wheel);
+
+      function loadeddata(event) {
+        console.log('loadeddata', event);
+      }
+
+      function loadedmetadata(event) {
+        console.log('loadedmetadata', event);
+      }
+
+      function loadstart(event) {
+        $scope.$apply(() => {
+          $scope.video.success = true;
+        });
+      }
+
+      function error() {
+        $scope.$apply(() => {
+          $scope.video.src = undefined;
+          $scope.video.success = false;
+          $scope.video.error = videoEl.error;
+          $scope.haveVideo = false;
+
+          console.log($scope);
+        });
+        console.log('error', arguments);
+      }
 
       function wheel(event) {
         wheelHandlers[currentMode]($scope, videoEl, event);
@@ -73,6 +103,14 @@ module.exports = [() => {
       $scope.togglePlay = () => {
         if (videoEl.paused) videoEl.play();
         else videoEl.pause();
+      };
+
+      $scope.setCurrentTime = time => {
+        if (videoEl.duration > 0) videoEl.currentTime = time;
+      };
+
+      $scope.incrementCurrentTime = delta => {
+        if (videoEl.duration > 0) videoEl.currentTime += delta;
       };
 
       $scope.setPlaybackRate = rate => {

@@ -1,4 +1,6 @@
-<div ng-if="video.src != null" class="has-video">
+<div ng-if="video.src != null"
+     ng-show="video.success"
+     class="has-video">
   <div class="divider">
     <playback-surface></playback-surface>
     <filters-panel ng-hide="hideFilters"></filters-panel>
@@ -6,7 +8,11 @@
   <position-bar></position-bar>
   <timeline ng-hide="hideTimeline"></timeline>
 </div>
-<div class="teaser" ng-if="video.src == null">
+<div ng-if="video.error != null" class="video-error">
+  Sorry, your browser doesn't support that video!
+  {{videoError}}
+</div>
+<div ng-if="video.src == null" class="teaser">
   <span class="drop">Drop A File, yo!</span>
   <span class="click">Or, Click!</span>
   <span class="paste">Or, Paste!</span>

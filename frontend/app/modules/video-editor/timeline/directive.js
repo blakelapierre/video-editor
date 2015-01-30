@@ -2,13 +2,16 @@ var _ = require('lodash');
 
 let numThumbnails = 5;
 
-module.exports = [() => {
+module.exports = ['on', 'off', (on, off) => {
   return {
     restrict: 'E',
     template: require('./template.html'),
     link: ($scope, element, attributes) => {
-      let thumbnailEl = element.find('video')[0],
+      let el = element[0],
+          thumbnailEl = element.find('video')[0],
           videoEl;
+
+      on(el, {wheel});
 
       $scope.$watchCollection('thumbnails', () => {
         let thumbnails = $scope.thumbnails,
@@ -38,15 +41,13 @@ module.exports = [() => {
       $scope.$watch('videoEl', (newEl, oldEl) => {
         videoEl = newEl;
 
+        console.dir(videoEl);
+
         if (oldEl) {
-          oldEl.removeEventListener('pause', pause);
-          oldEl.removeEventListener('timeupdate', timeupdate);
-          oldEl.removeEventListener('loadeddata', loadeddata);
+          off(oldEl, {pause, timeupdate, loadeddata});
         }
 
-        videoEl.addEventListener('pause', pause);
-        videoEl.addEventListener('timeupdate', timeupdate);
-        videoEl.addEventListener('loadeddata', loadeddata);
+        on(videoEl, {pause, timeupdate, loadeddata});
 
         function pause() {
           drawThumbnails(videoEl.currentTime);
@@ -145,6 +146,24 @@ module.exports = [() => {
           $scope.$apply();
         }
       })(thumbnailEl, $scope.thumbnails);
+
+      function wheel(event) {
+        let deltaY = event.deltaY;
+
+        $scope.$apply(() => {
+          if (deltaY > 0) {
+            _.each($scope.thumbnails, (thumbnail, index) => {
+              thumbnail.offset *= 2;
+            });
+          }
+          else if (deltaY < 0) {
+           _.each($scope.thumbnails, (thumbnail, index) => {
+              thumbnail.offset /= 2;
+            });
+          }
+          drawThumbnails(videoEl.currentTime);
+        });
+      }
     },
     controller: ['$scope', ($scope) => {
       $scope.thumbnails = [{},{},{},{},{},{}];
