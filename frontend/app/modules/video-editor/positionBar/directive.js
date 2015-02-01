@@ -6,34 +6,44 @@ module.exports = ['on', (on) => {
     template: require('./template.html'),
     link: ($scope, element, attributes) => {
       let el = element[0];
-
-      on(el, {mousedown, mouseup, mousemove, wheel});
-
-      // Need a better way to put this in the markup
+            // Need a better way to put this in the markup
       $scope.$watch('pinned', pinned => {
         if (pinned) element.addClass('pinned');
         else element.removeClass('pinned');
       });
 
-      let button = 0;
+      on(el, {
+        mousedown,
+        mouseup,
+        mousemove,
+        mouseenter,
+        wheel
+      });
+
+      let dragging = false;
       function mousedown(event) {
         if (event.button === 0) {
-          button++;
+          dragging = true;
           seekToBarPosition(event);
         }
       }
 
       function mouseup(event) {
         if (event.button === 0) {
-          button--;
+          dragging = false;
         }
       }
 
       function mousemove(event) {
-        if (button > 0) {
+        if (dragging) {
           seekToBarPosition(event);
         }
       }
+
+      function mouseenter(event) {
+        dragging = false;
+      }
+
 
       let lastWheelTime = new Date().getTime();
       function wheel(event) {
