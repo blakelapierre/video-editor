@@ -1,10 +1,4 @@
 node_modules
-dist
+.dist
 .tmp
-.sass-cache
 app/bower_components
-app/videos
-app/styles/pulsar.css
-app/assets/frigate
-app/assets/future-city
-app/scripts/app.js
