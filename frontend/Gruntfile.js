@@ -41,7 +41,7 @@ module.exports = function (grunt) {
         tasks: []
       },
       styles: {
-        files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
+        files: ['<%= yeoman.app %>/**/*.css'],
         tasks: ['newer:copy:styles', 'autoprefixer']
       },
       recess: {
@@ -217,7 +217,7 @@ module.exports = function (grunt) {
     // Performs rewrites based on rev and the useminPrepare configuration
     usemin: {
       html: ['<%= yeoman.dist %>/**/*.html'],
-      css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
+      css: ['<%= yeoman.dist %>/**/*.css'],
       options: {
         assetsDirs: ['<%= yeoman.dist %>']
       }
@@ -267,9 +267,9 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '.tmp/concat/scripts',
+          cwd: '.tmp/',
           src: '*.js',
-          dest: '.tmp/concat/scripts'
+          dest: '.dist/'
         }]
       }
     },
@@ -291,18 +291,22 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.dist %>',
           src: [
             '*.{ico,png,txt}',
-            '.htaccess',
             '*.html',
             'views/**/*.html',
             'bower_components/**/*',
             'images/{,*/}*.{webp}',
             'fonts/*'
           ]
-        }, {
+        },{
           expand: true,
           cwd: '.tmp/images',
           dest: '<%= yeoman.dist %>/images',
           src: ['generated/*']
+        },{
+          expand: true,
+          cwd: '.tmp',
+          dest: '<%= yeoman.dist %>',
+          src: ['*.css']
         }]
       }
     },
@@ -335,15 +339,15 @@ module.exports = function (grunt) {
     //     }
     //   }
     // },
-    // uglify: {
-    //   dist: {
-    //     files: {
-    //       '<%= yeoman.dist %>/scripts/scripts.js': [
-    //         '<%= yeoman.dist %>/scripts/scripts.js'
-    //       ]
-    //     }
-    //   }
-    // },
+    uglify: {
+      dist: {
+        files: {
+          '<%= yeoman.dist %>/app.js': [
+            '<%= yeoman.dist %>/app.js'
+          ]
+        }
+      }
+    },
     // concat: {
     //   dist: {}
     // },
@@ -391,18 +395,18 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
-    'watchify',
     'bowerInstall',
     'recess',
-    'useminPrepare',
     'concurrent:dist',
     'autoprefixer',
+    'useminPrepare',
+    'concat_css',
+    'cssmin',
+    'watchify',
     'concat',
     'ngmin',
     'copy:dist',
     'cdnify',
-    'concat_css',
-    'cssmin',
     'uglify',
     'rev',
     'usemin',

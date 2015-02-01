@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "dependencies": {},
   "devDependencies": {
-    "browserify": "^8.1.0",
+    "6to5ify": "^4.0.0",
     "browserify-shim": "^3.8.2",
     "es6ify": "^1.6.0",
     "grunt": "~0.4.5",
@@ -52,7 +52,7 @@
   },
   "browserify": {
     "transform": [
-      "es6ify",
+      "6to5ify",
       "browserify-shim",
       "partialify"
     ]
