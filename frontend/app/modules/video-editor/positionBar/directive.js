@@ -77,16 +77,17 @@ module.exports = ['on', (on) => {
         if (time !== currentTime) {
           currentTime = time;
           $scope.$apply(() => {
-            let duration = videoEl.duration,
-                thumbnails= $scope.thumbnails,
+            let time = videoEl.currentTime,
+                duration = videoEl.duration,
+                thumbnails = $scope.thumbnails,
                 firstThumbnail = thumbnails[0],
                 lastThumbnail = thumbnails[thumbnails.length - 1];
 
             $scope.currentTime = formatTime(time);
             $scope.remainingTime = formatTime(duration - time);
             $scope.currentPercent = 100 * (time / duration);
-            $scope.timelineWidth = 100 * (lastThumbnail.time - firstThumbnail.time) / duration;
-            $scope.timelineLeft = 100 * (time + firstThumbnail.offset) / duration;
+            $scope.timelineWidth = clamp(100 * (lastThumbnail.time - firstThumbnail.time) / duration, 0, 100);
+            $scope.timelineLeft = clamp(100 * (time + firstThumbnail.offset) / duration, 0, 100);
           });
         }
       };
@@ -108,4 +109,10 @@ function formatTime(timeInSeconds) {
          (minutes < 10 ? '0' + minutes : minutes) + '\'' +
          (seconds < 10 ? '0' + seconds : seconds) + '\'\'' +
          milliseconds;
+}
+
+function clamp(value, min, max) {
+  min = min === undefined ? Number.NEGATIVE_INFINITY : min;
+  max = max === undefined ? Number.POSITIVE_INFINITY : max;
+  return Math.min(Math.max(min, value), max);
 }
