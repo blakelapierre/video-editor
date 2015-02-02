@@ -81,6 +81,7 @@ module.exports = [() => {
       function loadstart(event) {
         $scope.$apply(() => {
           $scope.video.success = true;
+          $scope.setPlaybackRate(1);
         });
       }
 
