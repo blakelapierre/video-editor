@@ -9,6 +9,6 @@
   <audio-panel></audio-panel>
   <div class="playback-rate">
     <span class="rate">{{playbackRate}}</span>
-    <span class="x">X</span>
+    <span class="x" ng-click="setPlaybackRate(1); $event.stopPropagation()">X</span>
   </div>
 </div>
