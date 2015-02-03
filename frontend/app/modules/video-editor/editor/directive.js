@@ -17,6 +17,7 @@ module.exports = ['$sce', $sce => {
 
           if (type.indexOf('video') === 0) {
             $scope.video.src = $sce.trustAsResourceUrl(URL.createObjectURL(file));
+            $scope.video.loaded = false;
           }
         }
       };
