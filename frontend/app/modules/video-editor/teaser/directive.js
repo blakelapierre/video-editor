@@ -4,22 +4,30 @@ module.exports = () => {
     template: require('./template.html'),
     controller: ['$scope', $scope => {
       $scope.teaserClicked = () => {
-        if ($scope.files.length === 0) $scope.promptForFile();
+        $scope.promptForFile();
       };
 
       $scope.promptForFile = () => {
-        var input = document.createElement('input');
-        input.type = 'file';
-        input.multiple = true;
-
-        angular.element(input).bind('change', event => {
-          $scope.$apply(() => {
-            $scope.droppedFiles(event.target.files);
-          });
-        });
-
+        const input = getFileInput();
         input.click();
       };
+
+      let input; // is there a better memoization pattern than this?
+      function getFileInput() {
+        if (!input) {
+          input = document.createElement('input');
+          input.type = 'file';
+          input.multiple = true;
+
+          angular.element(input).bind('change', event => {
+            $scope.$apply(() => {
+              $scope.droppedFiles(event.target.files);
+            });
+          });
+        }
+
+        return input;
+      }
     }]
   };
 };
