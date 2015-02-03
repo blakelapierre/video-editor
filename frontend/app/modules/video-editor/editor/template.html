@@ -1,3 +1,5 @@
+<teaser ng-if="!video.success" ng-click="teaserClicked()"></teaser>
+<playback-error ng-if="video.error != null" ng-class="{'expand': expand}" ng-click="expand = !expand"></playback-error>
 <div ng-if="video.src != null"
      ng-show="video.success"
      class="has-video">
@@ -8,8 +10,3 @@
   <position-bar></position-bar>
   <timeline ng-hide="hideTimeline"></timeline>
 </div>
-<div ng-if="video.error != null" class="video-error">
-  Sorry, your browser doesn't support that video!
-  {{videoError}}
-</div>
-<teaser ng-if="video.src == null" ng-click="teaserClicked()"></teaser>

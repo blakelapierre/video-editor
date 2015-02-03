@@ -34,8 +34,25 @@ editor {
 
   display: flex;
 
+  flex-direction: column;
+
   justify-content: center;
   align-content: center;
+
+  playback-error {
+    position: absolute;
+
+    width: 100%;
+  }
+
+  teaser {
+    height: 100%;
+    width: 100%;
+
+    flex: 1 1 auto;
+
+    align-self: center;
+  }
 
   .has-video {
     display: flex;
@@ -98,13 +115,5 @@ editor {
 
       display: flex;
     }
-  }
-
-  teaser {
-    height: 100%;
-
-    flex: 1;
-
-    align-self: center;
   }
 }

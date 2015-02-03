@@ -3,7 +3,7 @@ module.exports = ['$sce', $sce => {
     restrict: 'E',
     template: require('./template.html'),
     controller: ['$scope', $scope => {
-      $scope.video = {src: undefined};
+      $scope.video = {src: undefined, success: false};
 
       $scope.receivedPaste = $event => {
         console.log($event, $event.clipboardData.getData('text/plain'));
@@ -18,6 +18,7 @@ module.exports = ['$sce', $sce => {
           if (type.indexOf('video') === 0) {
             $scope.video.src = $sce.trustAsResourceUrl(URL.createObjectURL(file));
             $scope.video.loaded = false;
+            $scope.video.error = undefined;
           }
         }
       };

@@ -21,6 +21,7 @@ module.exports = {
     .directive('audioPanel',      require('./modules/video-editor/audioPanel/directive'))
     .directive('editor',          require('./modules/video-editor/editor/directive'))
     .directive('filtersPanel',    require('./modules/video-editor/filtersPanel/directive'))
+    .directive('playbackError',   require('./modules/video-editor/playbackError/directive'))
     .directive('playbackSurface', require('./modules/video-editor/playbackSurface/directive'))
     .directive('positionBar',     require('./modules/video-editor/positionBar/directive'))
     .directive('teaser',          require('./modules/video-editor/teaser/directive'))

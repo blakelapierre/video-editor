@@ -77,6 +77,7 @@ module.exports = [() => {
       }
 
       function loadedmetadata(event) {
+
       }
 
       function loadstart(event) {
@@ -86,15 +87,22 @@ module.exports = [() => {
         });
       }
 
+      function loadstart(event) {
+        console.log('start');
+      }
+
       function error() {
+        const error = videoEl.error;
         $scope.$apply(() => {
           $scope.video.src = undefined;
           $scope.video.success = false;
-          $scope.video.error = videoEl.error;
           $scope.video.loaded = false;
-          $scope.haveVideo = false;
+          $scope.video.error = error;
 
-          console.log($scope);
+          switch (error.code) {
+            case 4:
+              $scope.video.errorMessage = 'Your browser does not support this video!';
+          }
         });
       }
 

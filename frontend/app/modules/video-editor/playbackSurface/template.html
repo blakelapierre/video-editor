@@ -1,7 +1,7 @@
-<div ng-if="video.loaded != true" class="loading">Loading video...</div>
+<div ng-if="!video.loaded" class="loading">Loading video...</div>
 
 <video
-      ng-show="video.src != null && video.loaded"
+      ng-show="video.loaded"
       ng-src="{{video.src}}"></video>
 
 <div
