@@ -40,6 +40,14 @@ position-bar {
     }
   }
 
+  // Must occur AFTER the previous &.pinned .surface-overlay
+  &.pinned {
+    .surface-overlay {
+      top: 0%;
+      bottom: 0%;
+    }
+  }
+
   .commands {
     position: absolute;
 

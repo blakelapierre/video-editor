@@ -16,9 +16,10 @@ module.exports = ['on', (on) => {
         mousedown,
         mouseup,
         mousemove,
-        mouseenter,
         wheel
       });
+
+      on(window, {mouseout});
 
       let dragging = false;
       function mousedown(event) {
@@ -40,10 +41,9 @@ module.exports = ['on', (on) => {
         }
       }
 
-      function mouseenter(event) {
+      function mouseout(event) {
         dragging = false;
       }
-
 
       let lastWheelTime = new Date().getTime();
       function wheel(event) {
