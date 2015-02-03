@@ -23,6 +23,4 @@ module.exports = {
     .directive('positionBar',     require('./modules/video-editor/positionBar/directive'))
     .directive('teaser',          require('./modules/video-editor/teaser/directive'))
     .directive('timeline',        require('./modules/video-editor/timeline/directive'))
-
-    .service('thumbnails', require('./modules/video-editor/thumbnails/service'))
 };
