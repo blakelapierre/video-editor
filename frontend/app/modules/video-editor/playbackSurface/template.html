@@ -6,6 +6,7 @@
     class="overlay"
     ng-click="togglePlay()">
   <audio-panel></audio-panel>
+  <transforms-panel ng-click="$event.stopPropagation()"></transforms-panel>
   <div class="playback-rate">
     <span class="rate">{{playbackRate}}</span>
     <span class="x" ng-click="setPlaybackRate(1); $event.stopPropagation()">X</span>

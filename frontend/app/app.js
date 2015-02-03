@@ -1,6 +1,8 @@
 var angular = require('angular'),
     sanitize = require('angular-sanitize');
 
+// Lots of redundency here -- Thanks you captain obvious!
+
 module.exports = {
   'content-editable': angular.module('content-editable', ['ngSanitize'])
     .directive('contenteditable', require('./modules/content-editable/contentEditable/directive.js'))
@@ -23,4 +25,5 @@ module.exports = {
     .directive('positionBar',     require('./modules/video-editor/positionBar/directive'))
     .directive('teaser',          require('./modules/video-editor/teaser/directive'))
     .directive('timeline',        require('./modules/video-editor/timeline/directive'))
+    .directive('transformsPanel', require('./modules/video-editor/transformsPanel/directive'))
 };
