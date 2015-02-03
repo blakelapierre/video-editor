@@ -1,0 +1,581 @@
+body {
+  color: #fff;
+  background-color: #000;
+}
+number .buttons {
+  float: left;
+  color: #fff;
+}
+
+number input {
+  width: 5em;
+}
+audio-panel {
+  background-color: transparent;
+}
+
+audio-panel canvas {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+}
+@-webkit-keyframes blow-up {
+  0% {
+    font-size: 0;
+  }
+  100% {
+    font-size: 1em;
+  }
+}
+
+@keyframes blow-up {
+  0% {
+    font-size: 0;
+  }
+  100% {
+    font-size: 1em;
+  }
+}
+
+@-webkit-keyframes fill {
+  0% {
+    font-size: 0vw;
+    -webkit-transform: rotateZ(0deg) rotateX(0deg);
+            transform: rotateZ(0deg) rotateX(0deg);
+  }
+  66.6% {
+    font-size: 12vw;
+    -webkit-transform: rotateZ(720deg) rotateX(0deg);
+            transform: rotateZ(720deg) rotateX(0deg);
+  }
+  93% {
+    font-size: 12vw;
+    -webkit-transform: rotateZ(720deg) rotateX(0deg);
+            transform: rotateZ(720deg) rotateX(0deg);
+  }
+  100% {
+    font-size: 0vw;
+    -webkit-transform: rotateZ(0deg) rotateX(1080deg);
+            transform: rotateZ(0deg) rotateX(1080deg);
+  }
+}
+
+@keyframes fill {
+  0% {
+    font-size: 0vw;
+    -webkit-transform: rotateZ(0deg) rotateX(0deg);
+            transform: rotateZ(0deg) rotateX(0deg);
+  }
+  66.6% {
+    font-size: 12vw;
+    -webkit-transform: rotateZ(720deg) rotateX(0deg);
+            transform: rotateZ(720deg) rotateX(0deg);
+  }
+  93% {
+    font-size: 12vw;
+    -webkit-transform: rotateZ(720deg) rotateX(0deg);
+            transform: rotateZ(720deg) rotateX(0deg);
+  }
+  100% {
+    font-size: 0vw;
+    -webkit-transform: rotateZ(0deg) rotateX(1080deg);
+            transform: rotateZ(0deg) rotateX(1080deg);
+  }
+}
+
+editor {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: -webkit-flex;
+  display: flex;
+  overflow: hidden;
+  -webkit-justify-content: center;
+          justify-content: center;
+  -webkit-align-content: center;
+          align-content: center;
+}
+
+editor .has-video {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: column;
+          flex-flow: column;
+  -webkit-flex: 1 1 auto;
+          flex: 1 1 auto;
+}
+
+editor .has-video .divider {
+  position: relative;
+  display: -webkit-flex;
+  display: flex;
+  width: 100%;
+  -webkit-flex-flow: row;
+          flex-flow: row;
+  -webkit-flex: 1 1 auto;
+          flex: 1 1 auto;
+}
+
+editor .has-video .divider playback-surface {
+  -webkit-flex: 1 1 auto;
+          flex: 1 1 auto;
+}
+
+editor .has-video .divider filters-panel {
+  -webkit-flex: 0 0 auto;
+          flex: 0 0 auto;
+}
+
+editor .has-video audio-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+editor .has-video position-bar {
+  -webkit-flex: 0 0 auto;
+          flex: 0 0 auto;
+}
+
+editor .has-video timeline {
+  display: -webkit-flex;
+  display: flex;
+  width: 100%;
+  max-height: 30%;
+  -webkit-flex: 0 0 auto;
+          flex: 0 0 auto;
+}
+
+editor teaser {
+  height: 100%;
+  -webkit-flex: 1;
+          flex: 1;
+  -webkit-align-self: center;
+          align-self: center;
+}
+filters-panel {
+  display: -webkit-flex;
+  display: flex;
+  overflow: auto;
+  -webkit-flex-direction: column;
+          flex-direction: column;
+  -webkit-justify-content: center;
+          justify-content: center;
+}
+
+filters-panel .container {
+  padding-right: 1vw;
+  padding-left: 1vw;
+  font-size: 1em;
+}
+
+filters-panel .container .header {
+  padding: 0.25em 0;
+  font-size: 1.5em;
+  text-align: center;
+  cursor: pointer;
+}
+
+filters-panel .container table {
+  font-size: 0.95em;
+  border-spacing: 0;
+}
+
+filters-panel .container table tr {
+  cursor: row-resize;
+}
+
+filters-panel .container table tr:hover {
+  text-shadow: 0px 0px 3px #ffd;
+}
+
+filters-panel .container table tr td {
+  padding-bottom: 0.2vw;
+}
+
+filters-panel .container table tr .name {
+  padding-right: 2vw;
+}
+
+filters-panel .container table tr .value input {
+  width: 5em;
+  color: #fff;
+  text-align: right;
+  cursor: text;
+  background-color: transparent;
+  border: none;
+}
+
+filters-panel .container table tr .unit {
+  font-size: 0.65em;
+}
+
+filters-panel .container .reset {
+  padding-top: 2vw;
+  padding-left: 2vw;
+  font-size: 0.9em;
+  text-align: center;
+  cursor: pointer;
+}
+@-webkit-keyframes appear {
+  0% {
+    max-width: 20%;
+  }
+  100% {
+    max-width: 100%;
+  }
+}
+
+@keyframes appear {
+  0% {
+    max-width: 20%;
+  }
+  100% {
+    max-width: 100%;
+  }
+}
+
+playback-surface {
+  position: relative;
+  display: -webkit-flex;
+  display: flex;
+  overflow: hidden;
+  -webkit-perspective: 700px;
+          perspective: 700px;
+}
+
+playback-surface .loading {
+  text-align: center;
+  -webkit-flex: 1;
+          flex: 1;
+  -webkit-align-self: center;
+          align-self: center;
+}
+
+playback-surface video {
+  position: relative;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  max-height: 100%;
+  margin: 0 auto;
+  -webkit-animation: appear 0.5s ease-in;
+          animation: appear 0.5s ease-in;
+  -webkit-flex: 4 1 auto;
+          flex: 4 1 auto;
+}
+
+playback-surface .overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+playback-surface .overlay .playback-rate {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  color: #fff;
+}
+
+playback-surface .overlay .playback-rate .rate {
+  font-size: 0.75em;
+}
+
+playback-surface .overlay .playback-rate .x {
+  font-size: 0.5em;
+  cursor: pointer;
+}
+position-bar {
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+  background-color: #000;
+}
+
+position-bar:hover .surface-overlay,
+position-bar.pinned .surface-overlay {
+  position: absolute;
+  top: -150%;
+  bottom: -150%;
+  z-index: 1;
+  display: block;
+  width: 100%;
+}
+
+position-bar:hover .commands,
+position-bar.pinned .commands {
+  display: block;
+}
+
+position-bar:hover .bar,
+position-bar.pinned .bar {
+  font-size: 1.25em;
+  line-height: 1em;
+  box-shadow: inset -1px 2px 2px 0px #dddddd;
+  transition: box-shadow 0.05s linear, font-size 0.05s linear, height 0.05s linear, line-height 0.05s linear;
+}
+
+position-bar.pinned .surface-overlay {
+  top: 0;
+  bottom: 0;
+}
+
+position-bar .commands {
+  position: absolute;
+  bottom: 100%;
+  z-index: 1;
+  display: none;
+  color: #0f0;
+}
+
+position-bar .bar {
+  position: relative;
+  float: left;
+  width: 0;
+  height: 1em;
+  font-size: 0.33em;
+  line-height: 1em;
+  text-align: right;
+  box-shadow: inset -1px 1px 3px -1px #ffffff;
+  transition: box-shadow 0.05s linear, font-size 0.05s linear, height 0.05s linear, line-height 0.05s linear;
+}
+
+position-bar .bar .surface-overlay {
+  display: none;
+}
+
+position-bar .bar .time.current-time {
+  position: absolute;
+  right: 0;
+  padding-right: 0.2em;
+  color: #3d3;
+  text-shadow: 0px 0px 2px #3d3;
+}
+
+position-bar .bar .time.remaining-time {
+  position: absolute;
+  left: 100%;
+  padding-left: 0.2em;
+  color: #d33;
+  text-shadow: 0px 0px 2px #d33;
+}
+
+position-bar .timeline-extent {
+  position: absolute;
+  bottom: 0;
+  height: 20%;
+  border: solid 1px #884;
+  border-top: none;
+}
+.unselectable {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+teaser {
+  display: -webkit-flex;
+  display: flex;
+}
+
+teaser .container {
+  font-size: 2vw;
+  color: #fff;
+  text-align: center;
+  -webkit-flex: 1;
+          flex: 1;
+  -webkit-align-self: center;
+          align-self: center;
+}
+
+teaser .container > span {
+  display: block;
+  margin: 1em;
+}
+
+teaser .container .drop {
+  -webkit-animation: blow-up 1s 0.15s linear;
+          animation: blow-up 1s 0.15s linear;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+}
+
+teaser .container .click {
+  -webkit-animation: blow-up 1s 3.15s linear;
+          animation: blow-up 1s 3.15s linear;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+}
+
+teaser .container .paste {
+  -webkit-animation: blow-up 1s 5.15s linear;
+          animation: blow-up 1s 5.15s linear;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+}
+
+teaser .container .anywhere {
+  -webkit-animation: fill 4s 7s cubic-bezier(1, 0, 0, 1);
+          animation: fill 4s 7s cubic-bezier(1, 0, 0, 1);
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+}
+timeline {
+  position: relative;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: row;
+          flex-flow: row;
+}
+
+timeline:hover .hide-timeline {
+  display: block;
+}
+
+timeline .thumbnail-video {
+  display: none;
+}
+
+timeline .hide-timeline {
+  position: absolute;
+  top: -1em;
+  right: 0;
+  display: none;
+  margin-right: 0.5em;
+  font-size: 1.2em;
+  color: #fff;
+  cursor: pointer;
+}
+
+timeline .thumbnail {
+  position: relative;
+  width: 20%;
+  -webkit-flex: 1 1 auto;
+          flex: 1 1 auto;
+}
+
+timeline .thumbnail.pending .overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+timeline .thumbnail.zero .time-offset {
+  left: 50%;
+}
+
+timeline .thumbnail.positive .time-offset {
+  right: 0;
+}
+
+timeline .thumbnail.positive .time-offset:before {
+  content: "+";
+}
+
+timeline .thumbnail canvas {
+  width: 100%;
+}
+
+timeline .thumbnail .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+timeline .thumbnail .overlay:hover .remove-thumbnail {
+  display: block;
+}
+
+timeline .thumbnail .overlay:hover .remove-thumbnail:hover {
+  text-shadow: 0px 0px 4px #000;
+}
+
+timeline .thumbnail .overlay:hover .add-thumbnail {
+  display: block;
+}
+
+timeline .thumbnail .overlay:hover .add-thumbnail:hover {
+  text-shadow: 0px 0px 4px #000;
+}
+
+timeline .thumbnail .overlay > * {
+  position: absolute;
+}
+
+timeline .thumbnail .overlay .time-offset {
+  bottom: 0;
+  font-size: 0.65em;
+  cursor: text;
+}
+
+timeline .thumbnail .overlay .remove-thumbnail {
+  top: 0;
+  left: 0;
+  display: none;
+  padding-right: 0.5em;
+  padding-left: 0.2em;
+  font-size: 2vw;
+  cursor: pointer;
+}
+
+timeline .thumbnail .overlay .add-thumbnail {
+  top: 0;
+  right: 0;
+  display: none;
+  padding-right: 0.2em;
+  padding-left: 0.5em;
+  font-size: 2vw;
+  cursor: pointer;
+}
+transforms-panel {
+  position: absolute;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+          flex-direction: column;
+  -webkit-align-items: center;
+          align-items: center;
+}
+
+transforms-panel > div {
+  cursor: pointer;
+}
+
+transforms-panel .up {
+  -webkit-flex: 1 1 auto;
+          flex: 1 1 auto;
+}
+
+transforms-panel .row {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+          flex-direction: row;
+  -webkit-flex: 1 1 auto;
+          flex: 1 1 auto;
+}
+
+transforms-panel .row .left {
+  -webkit-flex: 1 1 auto;
+          flex: 1 1 auto;
+}
+
+transforms-panel .row .right {
+  -webkit-flex: 1 1 auto;
+          flex: 1 1 auto;
+}
+
+transforms-panel .down {
+  -webkit-flex: 1 1 auto;
+          flex: 1 1 auto;
+}
