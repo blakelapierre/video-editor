@@ -72,6 +72,9 @@ module.exports = [() => {
 
       function loadeddata(event) {
         console.log('loadeddata', event);
+        $scope.$apply(() => {
+          $scope.video.loaded = true;
+        });
       }
 
       function loadedmetadata(event) {
@@ -90,6 +93,7 @@ module.exports = [() => {
           $scope.video.src = undefined;
           $scope.video.success = false;
           $scope.video.error = videoEl.error;
+          $scope.video.loaded = false;
           $scope.haveVideo = false;
 
           console.log($scope);
