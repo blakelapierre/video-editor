@@ -12,9 +12,4 @@
   Sorry, your browser doesn't support that video!
   {{videoError}}
 </div>
-<div ng-if="video.src == null" class="teaser">
-  <span class="drop">Drop A File, yo!</span>
-  <span class="click">Or, Click!</span>
-  <span class="paste">Or, Paste!</span>
-  <span class="anywhere">[anywhere]</span>
-</div>
+<teaser ng-if="video.src == null" ng-click="teaserClicked()"></teaser>

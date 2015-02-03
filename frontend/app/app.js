@@ -6,7 +6,7 @@ module.exports = {
     .directive('contenteditable', require('./modules/content-editable/contentEditable/directive.js'))
   ,
   'drag-and-drop': angular.module('drag-and-drop', [])
-    .directive('fileDropArea', require('./modules/drag-and-drop/fileDropArea/directive'))
+    .directive('dropArea', require('./modules/drag-and-drop/dropArea/directive'))
   ,
   'event-listeners': angular.module('event-listeners', [])
     .factory('on',  require('./modules/event-listeners/on/factory'))
@@ -21,6 +21,7 @@ module.exports = {
     .directive('filtersPanel',    require('./modules/video-editor/filtersPanel/directive'))
     .directive('playbackSurface', require('./modules/video-editor/playbackSurface/directive'))
     .directive('positionBar',     require('./modules/video-editor/positionBar/directive'))
+    .directive('teaser',          require('./modules/video-editor/teaser/directive'))
     .directive('timeline',        require('./modules/video-editor/timeline/directive'))
 
     .service('thumbnails', require('./modules/video-editor/thumbnails/service'))

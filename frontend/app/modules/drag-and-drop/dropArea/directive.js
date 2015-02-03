@@ -4,7 +4,7 @@
 
 */
 
-module.exports = function fileDropAreaDirective() {
+module.exports = ['$parse', $parse => {
 
   function processDragOverEnter(e) {
     e.preventDefault();
@@ -13,17 +13,14 @@ module.exports = function fileDropAreaDirective() {
 
   return {
     restrict: 'A',
-    scope: {
-      'file': '=fileDropArea'
-    },
-    link: function($scope, element) {
+    link: function($scope, element, attributes) {
       element.bind('dragover', processDragOverEnter);
       element.bind('dragenter', processDragOverEnter);
 
       element.bind('drop', function(e) {
         e.preventDefault();
 
-        $scope.file = e.dataTransfer.files[0];
+        $parse(attributes.dropArea)($scope, {$files: e.dataTransfer.files, $items: e.dataTransfer.items});
 
         $scope.$apply();
 
@@ -31,4 +28,4 @@ module.exports = function fileDropAreaDirective() {
       });
     }
   };
-};
+}];

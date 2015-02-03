@@ -1,0 +1,39 @@
+teaser {
+  display: flex;
+
+  .container {
+    flex: 1;
+    align-self: center;
+
+    color: #fff;
+
+    text-align: center;
+
+    font-size: 2vw;
+
+    >span {
+      display: block;
+      margin: 1em;
+    }
+
+    .drop {
+      animation: blow-up 1s 0.15s linear;
+      animation-fill-mode: both;
+    }
+
+    .click {
+      animation: blow-up 1s 3.15s linear;
+      animation-fill-mode: both;
+    }
+
+    .paste {
+      animation: blow-up 1s 5.15s linear;
+      animation-fill-mode: both;
+    }
+
+    .anywhere {
+      animation: fill 4s 7s cubic-bezier(1, 0, 0, 1);
+      animation-fill-mode: both;
+    }
+  }
+}
