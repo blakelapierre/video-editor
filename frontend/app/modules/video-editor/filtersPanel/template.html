@@ -1,9 +1,11 @@
-<div class="header" ng-click="hideFilters = !hideFilters">Filters</div>
-<table>
-  <tr ng-repeat="filter in filters" class="row">
-    <td class="name">{{filter.name}}</td>
-    <td class="value"><input type="number" ng-model="filter.value" min="{{filter.min}}" max="{{filter.max}}"></td>
-    <td class="unit">{{filter.unit}}</td>
-  </tr>
-</table>
-<div class="reset" ng-click="reset()">Reset Filters</div>
+<div class="container">
+  <div class="header" ng-click="hideFilters = !hideFilters">Filters</div>
+  <table>
+    <tr ng-repeat="filter in filters" class="row">
+      <td class="name">{{filter.name}}</td>
+      <td class="value"><input type="number" ng-model="filter.value" min="{{filter.min}}" max="{{filter.max}}"></td>
+      <td class="unit">{{filter.unit}}</td>
+    </tr>
+  </table>
+  <div class="reset" ng-click="reset()">Reset Filters</div>
+</div>
