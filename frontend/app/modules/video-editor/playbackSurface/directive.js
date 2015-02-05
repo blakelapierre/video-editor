@@ -77,10 +77,6 @@ module.exports = [() => {
       }
 
       function loadedmetadata(event) {
-
-      }
-
-      function loadstart(event) {
         $scope.$apply(() => {
           $scope.video.success = true;
           $scope.setPlaybackRate(1);
@@ -88,7 +84,7 @@ module.exports = [() => {
       }
 
       function loadstart(event) {
-        console.log('start');
+
       }
 
       function error() {

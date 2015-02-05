@@ -41,8 +41,6 @@ module.exports = ['on', 'off', (on, off) => {
       $scope.$watch('videoEl', (newEl, oldEl) => {
         videoEl = newEl;
 
-        console.dir(videoEl);
-
         if (oldEl) {
           off(oldEl, {pause, timeupdate, loadeddata});
         }
