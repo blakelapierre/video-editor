@@ -62,6 +62,21 @@ editor {
       }
     }
 
+    // Why Mozilla? Why?
+    @-moz-document url-prefix() {
+      .divider {
+        height: 70%;
+      }
+    }
+
+    // Et tu, mS?
+    @media all and (-ms-high-contrast: none) {
+      .divider {
+        height: 70%;
+      }
+    }
+    // Probably should just detect browser on load and apply class to body/html element
+
     audio-panel {
       position: absolute;
       top: 0;

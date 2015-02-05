@@ -1,9 +1,27 @@
-<div class="up" ng-click="panUp()" title="Pan Up">&#8679</div>
+<div class="up"
+     ng-mousedown="mouseDown('up')"
+     ng-mouseup="mouseUp('up')"
+     title="Pan Up">&#8679</div>
 <div class="row">
-  <div class="left" ng-click="panLeft()" title="Pan Left">&#8678</div>
-  <div class="right" ng-click="panRight()" title="Pan Right">&#8680</div>
+  <div class="left"
+       ng-mousedown="mouseDown('left')"
+       ng-mouseup="mouseUp('left')"
+       title="Pan Left">&#8678</div>
+  <div class="right"
+       ng-mousedown="mouseDown('right')"
+       ng-mouseup="mouseUp('right')"
+       title="Pan Right">&#8680</div>
 </div>
-<div class="down" ng-click="panDown()" title="Pan Down">&#8681</div>
+<div class="down"
+     ng-mousedown="mouseDown('down')"
+     ng-mouseup="mouseUp('up')"
+     title="Pan Down">&#8681</div>
 
-<div class="in" ng-click="zoomIn()" title="Zoom In">+</div>
-<div class="out" ng-click="zoomOut()" title="Zoom Out">-</div>
+<div class="in"
+     ng-mousedown="mouseDown('in')"
+     ng-mouseup="mouseUp('in')"
+     title="Zoom In">+</div>
+<div class="out"
+     ng-mousedown="mouseDown('out')"
+     ng-mouseup="mouseUp('out')"
+     title="Zoom Out">-</div>

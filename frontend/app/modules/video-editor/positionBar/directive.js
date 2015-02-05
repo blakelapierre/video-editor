@@ -79,26 +79,28 @@ module.exports = ['on', (on) => {
         $scope.updateBar(time);
       }
     },
-    controller: ['$scope', $scope => {
+    controller: ['$scope', '$$rAF', ($scope, $$rAF) => {
       let videoEl = $scope.videoEl,
           currentTime;
 
       $scope.updateBar = time => {
         if (time !== currentTime) {
-          currentTime = time;
-          $scope.$apply(() => {
-            let time = videoEl.currentTime,
-                duration = videoEl.duration,
-                thumbnails = $scope.thumbnails,
-                firstThumbnail = thumbnails[0],
-                lastThumbnail = thumbnails[thumbnails.length - 1];
+          // $$rAF(() => {,
+            currentTime = time;
+            $scope.$apply(() => {
+              let time = videoEl.currentTime,
+                  duration = videoEl.duration,
+                  thumbnails = $scope.thumbnails,
+                  firstThumbnail = thumbnails[0],
+                  lastThumbnail = thumbnails[thumbnails.length - 1];
 
-            $scope.currentTime = formatTime(time);
-            $scope.remainingTime = formatTime(duration - time);
-            $scope.currentPercent = 100 * (time / duration);
-            $scope.timelineWidth = clamp(100 * (lastThumbnail.time - firstThumbnail.time) / duration, 0, 100);
-            $scope.timelineLeft = clamp(100 * (time + firstThumbnail.offset) / duration, 0, 100);
-          });
+              $scope.currentTime = formatTime(time);
+              $scope.remainingTime = formatTime(duration - time);
+              $scope.currentPercent = 100 * (time / duration);
+              $scope.timelineWidth = clamp(100 * (lastThumbnail.time - firstThumbnail.time) / duration, 0, 100);
+              $scope.timelineLeft = clamp(100 * (time + firstThumbnail.offset) / duration, 0, 100);
+            });
+          // });
         }
       };
 

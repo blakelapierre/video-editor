@@ -71,14 +71,12 @@ module.exports = [() => {
       overlayEl.addEventListener('wheel', wheel);
 
       function loadeddata(event) {
-        console.log('loadeddata', event);
         $scope.$apply(() => {
           $scope.video.loaded = true;
         });
       }
 
       function loadedmetadata(event) {
-        console.log('loadedmetadata', event);
       }
 
       function loadstart(event) {
@@ -98,7 +96,6 @@ module.exports = [() => {
 
           console.log($scope);
         });
-        console.log('error', arguments);
       }
 
       function wheel(event) {

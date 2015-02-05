@@ -2,10 +2,7 @@ module.exports = () => {
   return {
     restrict: 'E',
     template: require('./template.html'),
-    link: ($scope, element, attributes) => {
-
-    },
-    controller: ['$scope', $scope => {
+    controller: ['$scope', '$$rAF', ($scope, $$rAF) => {
       let currentTransforms = {},
           videoEl;
 
@@ -15,47 +12,33 @@ module.exports = () => {
         applyTransformStyles();
       });
 
-      $scope.panUp = () => {
-        const transform = currentTransforms['translateY'] = currentTransforms['translateY'] || {value: 0, unit: 'px'};
-        transform.value -= 1;
-
-        applyTransformStyles();
+      let currentTransform = false,
+          lastUpdate,
+          cancel;
+      $scope.mouseDown = which => {
+        currentTransform = transforms[which];
+        lastUpdate = new Date().getTime();
+        cancel = $$rAF(processCurrentTransform);
       };
 
-      $scope.panDown = () => {
-        const transform = currentTransforms['translateY'] = currentTransforms['translateY'] || {value: 0, unit: 'px'};
-        transform.value += 1;
-
-        applyTransformStyles();
+      $scope.mouseUp = which => {
+        currentTransform = false;
+        cancel();
       };
 
-      $scope.panLeft = () => {
-        const transform = currentTransforms['translateX'] = currentTransforms['translateX'] || {value: 0, unit: 'px'};
-        transform.value -= 1;
+      function processCurrentTransform() {
+        const time = new Date().getTime(),
+              dt = time - lastUpdate;
 
+        // Wow, this naming is horrible!
+        const transform = currentTransforms[currentTransform.transform] = currentTransforms[currentTransform.transform] || {value: 0, unit: currentTransform.unit};
+
+        transform.value += currentTransform.rate * (dt / 1000);
         applyTransformStyles();
-      };
 
-      $scope.panRight = () => {
-        const transform = currentTransforms['translateX'] = currentTransforms['translateX'] || {value: 0, unit: 'px'};
-        transform.value += 1;
-
-        applyTransformStyles();
-      };
-
-      $scope.zoomIn = () => {
-        const transform = currentTransforms['translateZ'] = currentTransforms['translateZ'] || {value: 0, unit: 'px'};
-        transform.value -= 1;
-
-        applyTransformStyles();
-      };
-
-      $scope.zoomOut = () => {
-        const transform = currentTransforms['translateZ'] = currentTransforms['translateZ'] || {value: 0, unit: 'px'};
-        transform.value -= 1;
-
-        applyTransformStyles();
-      };
+        lastUpdate = time;
+        cancel = $$rAF(processCurrentTransform);
+      }
 
       function applyTransformStyles() {
         const style = getTransformStyle();
@@ -81,13 +64,34 @@ module.exports = () => {
 };
 
 const transforms = {
-  translateX: {
-
+  up: {
+    transform: 'translateY',
+    rate: -10, // Units/second
+    unit: '%'
   },
-  translateY: {
-
+  down: {
+    transform: 'translateY',
+    rate: 10,
+    unit: '%'
   },
-  translateZ: {
-
+  left: {
+    transform: 'translateX',
+    rate: -10,
+    unit: '%'
+  },
+  right: {
+    transform: 'translateX',
+    rate: 10,
+    unit: '%'
+  },
+  in: {
+    transform: 'translateZ',
+    rate: 100,
+    unit: 'px'
+  },
+  out: {
+    transform: 'translateZ',
+    rate: -100,
+    unit: 'px'
   }
 };
