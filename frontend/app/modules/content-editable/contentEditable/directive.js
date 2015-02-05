@@ -6,7 +6,7 @@ module.exports = ['$sce', '$window', function($sce, $window) {
     link: ($scope, element, attributes, ngModel) => {
       if (!ngModel) return; // do nothing if no ng-model
 
-      let settings = attempt(() => $scope.$eval(attributes['editableType']), {});
+      let settings = attempt(() => $scope.$eval(attributes['editableType']), {type: 'number', default: 1});
 
       if (settings) {
         if (settings.type === 'int') {

@@ -127,7 +127,7 @@ module.exports = [() => {
         else if (rate < 0.05) rate = rate.toFixed(5);
         else if (rate < 0.5) rate = rate.toFixed(4);
         else rate = rate.toFixed(3);
-        $scope.playbackRate = rate;
+        $scope.video.playbackRate = rate;
       };
 
       $scope.createMediaElementSource = context => {

@@ -8,7 +8,7 @@
   <audio-panel></audio-panel>
   <transforms-panel ng-click="$event.stopPropagation()"></transforms-panel>
   <div class="playback-rate">
-    <span class="rate">{{playbackRate}}</span>
-    <span class="x" ng-click="setPlaybackRate(1); $event.stopPropagation()">X</span>
+    <span class="rate" contenteditable ng-model="video.playbackRate" ng-change="setPlaybackRate(video.playbackRate)" ng-click="$event.stopPropagation()" title="Playback Rate"></span>
+    <span class="x" ng-click="setPlaybackRate(1); $event.stopPropagation()" title="Click to reset to 1.0">X</span>
   </div>
 </div>
