@@ -7,7 +7,7 @@
 <div
     class="overlay"
     ng-click="togglePlay()">
-  <audio-panel></audio-panel>
+  <!-- <audio-panel></audio-panel> -->
   <transforms-panel ng-click="$event.stopPropagation()"></transforms-panel>
   <div class="playback-rate">
     <span class="rate" contenteditable ng-model="video.playbackRate" ng-change="setPlaybackRate(video.playbackRate)" ng-click="$event.stopPropagation()" title="Playback Rate"></span>

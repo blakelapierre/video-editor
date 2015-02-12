@@ -1,6 +1,6 @@
 let _ = require('lodash');
 
-module.exports = ['on', (on) => {
+module.exports = ['$$rAF', 'on', ($$rAF, on) => {
   return {
     restrict: 'E',
     template: require('./template.html'),
@@ -104,8 +104,14 @@ module.exports = ['on', (on) => {
         }
       };
 
-      videoEl.addEventListener('timeupdate', () => $scope.updateBar(videoEl.currentTime));
+      videoEl.addEventListener('play', () => $$rAF(animateBar));
+      // videoEl.addEventListener('timeupdate', () => $scope.updateBar(videoEl.currentTime));
       videoEl.addEventListener('loadeddata', () => $scope.updateBar(videoEl.currentTime));
+
+      function animateBar() {
+        $scope.updateBar(videoEl.currentTime);
+        if (!videoEl.paused) $$rAF(animateBar);
+      }
     }]
   };
 }];
@@ -115,12 +121,12 @@ function formatTime(timeInSeconds) {
       hours = Math.floor(time / (60 * 60)),
       minutes = Math.floor((time - (hours * 60 * 60)) / 60),
       seconds = Math.floor(time % 60),
-      milliseconds = Math.floor(time * 10 % 10);
+      centiseconds = Math.floor(time * 100 % 100);
 
   return (hours > 0 ? (hours + 'h') : '') +
          (minutes < 10 ? '0' + minutes : minutes) + '\'' +
          (seconds < 10 ? '0' + seconds : seconds) + '\'\'' +
-         milliseconds;
+         centiseconds;
 }
 
 function clamp(value, min, max) {
