@@ -1,7 +1,24 @@
 {
   "name": "base-angular",
+  "description": "An advanced base Angular.js project supporting ECMAScript 6/7, LESS, with a full Gulp.js build and development pipeline.",
+  "repository": "https://github.com/blakelapierre/base-angular",
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "del": "^1.1.1",
+    "gulp": "^3.8.11",
+    "gulp-cached": "^1.0.2",
+    "gulp-clean": "^0.3.1",
+    "gulp-jshint": "^1.9.2",
+    "gulp-less": "^3.0.0",
+    "gulp-load-plugins": "^0.8.0",
+    "gulp-pipe": "^1.0.3",
+    "gulp-print": "^1.1.0",
+    "gulp-sequence": "^0.3.2",
+    "gulp-watchify": "^0.3.0",
+    "less-plugin-autoprefix": "^1.3.0",
+    "less-plugin-clean-css": "^1.5.0",
+    "watchify": "^2.4.0"
+  },
   "devDependencies": {
     "6to5ify": "^4.0.0",
     "browserify-shim": "^3.8.2",
