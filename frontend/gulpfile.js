@@ -26,13 +26,16 @@ const gulp = require('gulp'),
 
 gulp.task('default', ['build']);
 
-gulp.task('build', sequence('clean', ['js:debug', 'less:debug', 'html', 'images', 'fonts'], ['minify-css', 'minify-html', 'minify-js']));
+gulp.task('build', sequence('clean-dist', ['js:debug', 'less:debug', 'html', 'images', 'fonts'], ['minify-css', 'minify-html', 'minify-js']));
 
 gulp.task('dev', cb => {
-  sequence(['js:debug', 'less:debug', 'html'], 'browser-sync')(cb);
-  gulp.watch(paths.html, [reload]);
-  gulp.watch(paths.scripts.concat(['src/modules/**/*.html']), ['js:debug', reload]);
-  gulp.watch(paths.less, ['less:debug'])
+  const {src} = paths;
+
+  sequence('clean-dev', ['js:debug', 'less:debug', 'html'], 'browser-sync')(cb);
+
+  gulp.watch(src.html, [reload]);
+  gulp.watch(src.scripts.concat(src.templates), ['js:debug', reload]);
+  gulp.watch(src.less, ['less:debug'])
       .on('change', event => {
         if (event.type === 'deleted') {
           delete cached.caches['less'][event.path];
@@ -46,19 +49,19 @@ gulp.task('browser-sync', () => reload());
 gulp.task('js:debug', ['jshint'],
   () => pipe([
     browserify({
-      entries: [paths.app],
+      entries: [paths.src.app],
       debug: true
     }).bundle()
     ,source('app.js')
     ,print()
-    ,gulp.dest(paths.dist)
+    ,gulp.dest(paths.dev.$)
   ]));
 
 gulp.task('js', ['jshint']);
 
 gulp.task('jshint',
   () => pipe([
-    gulp.src(paths.scripts)
+    gulp.src(paths.src.scripts)
     ,cached('jshint')
     ,print()
     ,jshint()
@@ -68,7 +71,7 @@ gulp.task('jshint',
 
 gulp.task('less:debug',
   () => multipipe( // my gulp-pipe fails here because of the less().on [doesn't forward errors]
-    gulp.src(paths.less)
+    gulp.src(paths.src.less)
     ,print()
     ,cached('less')
     ,sourcemaps.init()
@@ -78,45 +81,45 @@ gulp.task('less:debug',
     ,remember('less')
     ,concat('app.css')
     ,print()
-    ,gulp.dest(paths.dist)
+    ,gulp.dest(paths.dev.$)
     ,reload({stream: true})
   ));
 
 gulp.task('minify-css',
   () => pipe([
-    gulp.src(['.dist/app.css'])
+    gulp.src([paths.dev.css])
     ,print()
     ,minifyCss()
-    ,gulp.dest(paths.dist)
+    ,gulp.dest(paths.dist.$)
   ]));
 
 gulp.task('minify-js',
   () => pipe([
-    gulp.src(['.dist/app.js'])
+    gulp.src([paths.dev.app])
     ,print()
     ,uglify()
-    ,gulp.dest(paths.dist)
+    ,gulp.dest(paths.dist.$)
   ]));
 
 gulp.task('minify-html',
   () => pipe([
-    gulp.src(['.dist/index.html'])
+    gulp.src([paths.dev.html])
     ,print()
     ,minifyHtml()
-    ,gulp.dest(paths.dist)
+    ,gulp.dest(paths.dist.$)
   ]));
 
 gulp.task('html',
   () => pipe([
-    gulp.src(paths.html)
+    gulp.src(paths.src.html)
     ,print()
-    ,gulp.dest(paths.dist)
+    ,gulp.dest(paths.dev.$)
   ]));
 
 gulp.task('browser-sync',
   () => browserSync({
     server: {
-      baseDir: paths.dist
+      baseDir: paths.dev.$
     }
   }));
 
@@ -124,17 +127,37 @@ gulp.task('images');
 
 gulp.task('fonts');
 
-gulp.task('clean',
+gulp.task('clean-dev',
   () => pipe([
-    gulp.src(paths.dist, {read: false})
+    gulp.src(paths.dev.$, {read: false})
+    ,clean()
+  ]));
+
+gulp.task('clean-dist',
+  () => pipe([
+    gulp.src(paths.dist.$, {read: false})
     ,clean()
   ]));
 
 const paths = {
-  html: ['src/index.html'],
-  scripts: ['src/**/*.js'],
-  app: ['./src/app.js'],
-  less: ['src/**/*.less'],
-  src: 'src',
-  dist: '.dist'
+  src: {
+    $: './src',
+    app: ['./src/app.js'],
+    less: ['./src/**/*.less'],
+    html: ['./src/index.html'],
+    scripts: ['./src/**/*.js'],
+    templates: ['./src/modules/**/*.html']
+  },
+  dist: {
+    $: './.dist',
+    app: './.dist/app.js',
+    css: './.dist/app.css',
+    html: './.dist/index.html'
+  },
+  dev: {
+    $: './.dev',
+    app: './.dev/app.js',
+    css: './.dev/app.css',
+    html: './.dev/index.html'
+  }
 };
