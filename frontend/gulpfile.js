@@ -34,7 +34,8 @@ gulp.task('dev', cb => {
   sequence('clean-dev', ['js:debug', 'less:debug', 'html'], 'browser-sync')(cb);
 
   gulp.watch(src.html, [reload]);
-  gulp.watch(src.scripts.concat(src.templates), ['js:debug', reload]);
+  gulp.watch(src.scripts, ['js:debug', reload]);
+  gulp.watch(src.templates, ['js:debug', reload]);
   gulp.watch(src.less, ['less:debug'])
       .on('change', event => {
         if (event.type === 'deleted') {
@@ -75,7 +76,8 @@ gulp.task('less:debug',
     ,print()
     ,cached('less')
     ,sourcemaps.init()
-    ,less().on('error', lessReporter)
+    ,less()
+      .on('error', lessReporter)
     ,autoprefixer()
     ,sourcemaps.write()
     ,remember('less')
