@@ -1,5 +1,4 @@
-var angular = require('angular');
-
+require('angular'); // Don't assign result...angular/browserify doesn't like it...
 
 module.exports = {
   'base-angular': angular.module('base-angular', [])
