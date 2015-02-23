@@ -45,8 +45,6 @@ gulp.task('dev', cb => {
       });
 });
 
-gulp.task('browser-sync', () => reload());
-
 gulp.task('js:debug', ['jshint'],
   () => pipe([
     browserify({
