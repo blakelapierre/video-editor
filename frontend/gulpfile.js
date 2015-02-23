@@ -33,9 +33,9 @@ gulp.task('dev', cb => {
 
   sequence('clean-dev', ['js:debug', 'less:debug', 'html'], 'browser-sync')(cb);
 
-  gulp.watch(src.html).on('change', reload);
-  gulp.watch(src.scripts, ['js:debug']).on('change', reload);
-  gulp.watch(src.templates, ['js:debug']).on('change', reload);
+  gulp.watch(src.html, ['html']);
+  gulp.watch(src.scripts, ['js:debug']);
+  gulp.watch(src.templates, ['js:debug']);
   gulp.watch(src.less, ['less:debug'])
       .on('change', event => {
         if (event.type === 'deleted') {
@@ -60,6 +60,7 @@ gulp.task('js:debug', ['jshint'],
     ,source('app.js')
     ,print()
     ,gulp.dest(paths.dev.$)
+    ,reload({stream: true})
   ]));
 
 gulp.task('jshint',
@@ -95,6 +96,7 @@ gulp.task('html',
     gulp.src(paths.src.html)
     ,print()
     ,gulp.dest(paths.dev.$)
+    ,reload({stream: true})
   ]));
 
 gulp.task('minify-css',
