@@ -13,7 +13,7 @@
 ##### Install
 ````
 git clone https://github.com/blakelapierre/base-angular
-cd base-angular
+cd base-angular/frontend
 npm install
 ````
 
