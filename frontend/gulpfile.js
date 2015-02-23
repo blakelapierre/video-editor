@@ -33,9 +33,9 @@ gulp.task('dev', cb => {
 
   sequence('clean-dev', ['js:debug', 'less:debug', 'html'], 'browser-sync')(cb);
 
-  gulp.watch(src.html, [reload]);
-  gulp.watch(src.scripts, ['js:debug', reload]);
-  gulp.watch(src.templates, ['js:debug', reload]);
+  gulp.watch(src.html).on('change', reload);
+  gulp.watch(src.scripts, ['js:debug']).on('change', reload);
+  gulp.watch(src.templates, ['js:debug']).on('change', reload);
   gulp.watch(src.less, ['less:debug'])
       .on('change', event => {
         if (event.type === 'deleted') {
@@ -44,6 +44,11 @@ gulp.task('dev', cb => {
         }
       });
 });
+
+gulp.task('browser-sync',
+  () => browserSync({
+    server: paths.dev.$
+  }));
 
 gulp.task('js:debug', ['jshint'],
   () => pipe([
@@ -55,8 +60,6 @@ gulp.task('js:debug', ['jshint'],
     ,print()
     ,gulp.dest(paths.dev.$)
   ]));
-
-gulp.task('js', ['jshint']);
 
 gulp.task('jshint',
   () => pipe([
@@ -82,8 +85,16 @@ gulp.task('less:debug',
     ,concat('app.css')
     ,print()
     ,gulp.dest(paths.dev.$)
+    ,print(f => `reload${f}`)
     ,reload({stream: true})
   ));
+
+gulp.task('html',
+  () => pipe([
+    gulp.src(paths.src.html)
+    ,print()
+    ,gulp.dest(paths.dev.$)
+  ]));
 
 gulp.task('minify-css',
   () => pipe([
@@ -108,20 +119,6 @@ gulp.task('minify-html',
     ,minifyHtml()
     ,gulp.dest(paths.dist.$)
   ]));
-
-gulp.task('html',
-  () => pipe([
-    gulp.src(paths.src.html)
-    ,print()
-    ,gulp.dest(paths.dev.$)
-  ]));
-
-gulp.task('browser-sync',
-  () => browserSync({
-    server: {
-      baseDir: paths.dev.$
-    }
-  }));
 
 gulp.task('images');
 
