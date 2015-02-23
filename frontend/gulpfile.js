@@ -73,8 +73,8 @@ gulp.task('jshint',
 gulp.task('less:debug',
   () => multipipe( // my gulp-pipe fails here because of the less().on [doesn't forward errors]
     gulp.src(paths.src.less)
-    ,print()
     ,cached('less')
+    ,print()
     ,sourcemaps.init()
     ,less()
       .on('error', lessReporter)
@@ -145,10 +145,10 @@ const paths = {
   src: {
     $: './src',
     app: ['./src/app.js'],
-    less: ['./src/**/*.less'],
+    less: ['src/**/*.less'],
     html: ['./src/index.html'],
-    scripts: ['./src/**/*.js'],
-    templates: ['./src/modules/**/*.html']
+    scripts: ['src/**/*.js'],
+    templates: ['src/modules/**/template.html']
   },
   dist: {
     $: './.dist',
