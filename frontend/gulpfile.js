@@ -47,7 +47,8 @@ gulp.task('dev', cb => {
 
 gulp.task('browser-sync',
   () => browserSync({
-    server: paths.dev.$
+    server: paths.dev.$,
+    ghostMode: false
   }));
 
 gulp.task('js:debug', ['jshint'],
