@@ -5,6 +5,7 @@ const gulp = require('gulp'),
       browserSync = require('browser-sync'),
       reload = browserSync.reload,
       source = require('vinyl-source-stream'),
+      _ = require('lodash'),
       {
         autoprefixer,
         cached,
@@ -26,12 +27,12 @@ const gulp = require('gulp'),
 
 gulp.task('default', ['build']);
 
-gulp.task('build', sequence('clean-dist', ['js:debug', 'less:debug', 'html', 'images', 'fonts'], ['minify-css', 'minify-html', 'minify-js']));
+gulp.task('build', sequence('clean-dist', ['js-vendor', 'js-app', 'less:debug', 'html', 'images', 'fonts'], ['minify-css', 'minify-html', 'minify-js']));
 
 gulp.task('dev', cb => {
   const {src} = paths;
 
-  sequence('clean-dev', ['js:debug', 'less:debug', 'html'], 'browser-sync')(cb);
+  sequence('clean-dev', ['js-vendor', 'js-app', 'less:debug', 'html'], 'browser-sync')(cb);
 
   gulp.watch(src.html, ['html']);
   gulp.watch(src.scripts, ['js:debug']);
@@ -51,16 +52,27 @@ gulp.task('browser-sync',
     ghostMode: false
   }));
 
-gulp.task('js:debug', ['jshint'],
+gulp.task('js-vendor',
+  () => pipe([
+    browserify()
+      .require(_.keys(require('./package.json').dependencies))
+      .bundle()
+    ,source('vendor.js')
+    ,print()
+    ,gulp.dest(paths.dev.$)
+  ]));
+
+gulp.task('js-app', ['jshint'],
   () => pipe([
     browserify({
       entries: [paths.src.app],
       debug: true
-    }).bundle()
+    })
+      .external(_.keys(require('./package.json').dependencies))
+      .bundle()
     ,source('app.js')
     ,print()
     ,gulp.dest(paths.dev.$)
-    ,reload({stream: true})
   ]));
 
 gulp.task('jshint',
@@ -109,7 +121,7 @@ gulp.task('minify-css',
 
 gulp.task('minify-js',
   () => pipe([
-    gulp.src([paths.dev.app])
+    gulp.src([paths.dev.app].concat([paths.dev.vendor]))
     ,print()
     ,uglify()
     ,gulp.dest(paths.dist.$)
@@ -158,6 +170,7 @@ const paths = {
     $: './.dev',
     app: './.dev/app.js',
     css: './.dev/app.css',
-    html: './.dev/index.html'
+    html: './.dev/index.html',
+    vendor: './.dev/vendor.js'
   }
 };
