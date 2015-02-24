@@ -35,8 +35,8 @@ gulp.task('dev', cb => {
   sequence('clean-dev', ['js-vendor', 'js-app', 'less:debug', 'html'], 'browser-sync')(cb);
 
   gulp.watch(src.html, ['html']);
-  gulp.watch(src.scripts, ['js:debug']);
-  gulp.watch(src.templates, ['js:debug']);
+  gulp.watch(src.scripts, ['js-app']);
+  gulp.watch(src.templates, ['js-app']);
   gulp.watch(src.less, ['less:debug'])
       .on('change', event => {
         if (event.type === 'deleted') {
