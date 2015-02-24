@@ -73,6 +73,7 @@ gulp.task('js-app', ['jshint'],
     ,source('app.js')
     ,print()
     ,gulp.dest(paths.dev.$)
+    ,reload({stream: true})
   ]));
 
 gulp.task('jshint',
