@@ -11,6 +11,7 @@ const gulp = require('gulp'),
         cached,
         clean,
         concat,
+        imagemin,
         jshint,
         less,
         lessReporter,
@@ -27,7 +28,7 @@ const gulp = require('gulp'),
 
 gulp.task('default', ['build']);
 
-gulp.task('build', sequence('clean-dist', ['js-vendor', 'js-app', 'less:debug', 'html', 'images', 'fonts'], ['minify-css', 'minify-html', 'minify-js']));
+gulp.task('build', sequence('clean-dist', ['js-vendor', 'js-app', 'less:debug', 'html', 'images', 'fonts'], ['minify-css', 'minify-html', 'minify-js', 'minify-images']));
 
 gulp.task('dev', cb => {
   const {src} = paths;
@@ -112,6 +113,13 @@ gulp.task('html',
     ,reload({stream: true})
   ]));
 
+gulp.task('images',
+  () => pipe([
+    gulp.src(paths.src.images)
+    ,print()
+    ,gulp.dest(paths.dev.$)
+  ]));
+
 gulp.task('minify-css',
   () => pipe([
     gulp.src([paths.dev.css])
@@ -136,7 +144,13 @@ gulp.task('minify-html',
     ,gulp.dest(paths.dist.$)
   ]));
 
-gulp.task('images');
+gulp.task('minify-images',
+  () => pipe([
+    gulp.src([paths.dev.images])
+    ,print()
+    ,imagemin()
+    ,gulp.dest(paths.dist.$)
+  ]));
 
 gulp.task('fonts');
 
@@ -158,6 +172,7 @@ const paths = {
     app: ['./src/app.js'],
     less: ['src/**/*.less'],
     html: ['./src/index.html'],
+    images: ['./src/**/*.{svg,gif,png,jpg}'],
     scripts: ['src/**/*.js'],
     templates: ['src/modules/**/template.html']
   },
@@ -172,6 +187,7 @@ const paths = {
     app: './.dev/app.js',
     css: './.dev/app.css',
     html: './.dev/index.html',
+    images: './dev/**/*.{svg,gif,png,jpg}',
     vendor: './.dev/vendor.js'
   }
 };
