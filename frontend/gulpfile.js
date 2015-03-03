@@ -20,15 +20,21 @@ const gulp = require('gulp'),
         pipe,
         print,
         remember,
+        revAll,
         sequence,
         sourcemaps,
         uglify,
         util
       } = require('gulp-load-plugins')();
 
+let p = name => print(file => console.log(name, file));
+
 gulp.task('default', ['build']);
 
-gulp.task('build', sequence('clean-dist', ['js-vendor', 'js-app', 'less:debug', 'html', 'images', 'fonts'], ['minify-css', 'minify-html', 'minify-js', 'minify-images']));
+gulp.task('build', sequence(['clean-rev', 'clean-dist'],
+                            ['js-vendor', 'js-app', 'less:debug', 'html', 'images', 'fonts'],
+                            ['minify-css', 'minify-html', 'minify-js', 'minify-images'],
+                            'rev'));
 
 gulp.task('dev', cb => {
   const {src} = paths;
@@ -59,7 +65,7 @@ gulp.task('js-vendor',
       .require(_.keys(require('./package.json').dependencies))
       .bundle()
     ,source('vendor.js')
-    ,print()
+    ,p('js-vendor')
     ,gulp.dest(paths.dev.$)
   ]));
 
@@ -72,7 +78,7 @@ gulp.task('js-app', ['jshint'],
       .external(_.keys(require('./package.json').dependencies))
       .bundle()
     ,source('app.js')
-    ,print()
+    ,p('js-app')
     ,gulp.dest(paths.dev.$)
     ,reload({stream: true})
   ]));
@@ -81,7 +87,7 @@ gulp.task('jshint',
   () => pipe([
     gulp.src(paths.src.scripts)
     ,cached('jshint')
-    ,print()
+    ,p('jshint')
     ,jshint()
     ,jshint.reporter('jshint-stylish')
     ,jshint.reporter('fail')
@@ -91,7 +97,7 @@ gulp.task('less:debug',
   () => multipipe( // my gulp-pipe fails here because of the less().on [doesn't forward errors]
     gulp.src(paths.src.less)
     ,cached('less')
-    ,print()
+    ,p('less:debug')
     ,sourcemaps.init()
     ,less()
       .on('error', lessReporter)
@@ -99,7 +105,7 @@ gulp.task('less:debug',
     ,sourcemaps.write()
     ,remember('less')
     ,concat('app.css')
-    ,print()
+    ,p('less:debug:concat:post')
     ,gulp.dest(paths.dev.$)
     ,print(f => `reload${f}`)
     ,reload({stream: true})
@@ -108,7 +114,7 @@ gulp.task('less:debug',
 gulp.task('html',
   () => pipe([
     gulp.src(paths.src.html)
-    ,print()
+    ,p('html')
     ,gulp.dest(paths.dev.$)
     ,reload({stream: true})
   ]));
@@ -116,39 +122,48 @@ gulp.task('html',
 gulp.task('images',
   () => pipe([
     gulp.src(paths.src.images)
-    ,print()
+    ,p('images')
     ,gulp.dest(paths.dev.$)
   ]));
 
 gulp.task('minify-css',
   () => pipe([
     gulp.src([paths.dev.css])
-    ,print()
+    ,p('minify-css')
     ,minifyCss()
-    ,gulp.dest(paths.dist.$)
+    ,gulp.dest(paths.rev.$)
   ]));
 
 gulp.task('minify-js',
   () => pipe([
     gulp.src([paths.dev.app].concat([paths.dev.vendor]))
-    ,print()
+    ,p('minify-js')
     ,uglify()
-    ,gulp.dest(paths.dist.$)
+    ,gulp.dest(paths.rev.$)
   ]));
 
 gulp.task('minify-html',
   () => pipe([
     gulp.src([paths.dev.html])
-    ,print()
-    ,minifyHtml()
-    ,gulp.dest(paths.dist.$)
+    ,p('minify-html')
+    ,minifyHtml({quotes: true})
+    ,gulp.dest(paths.rev.$)
   ]));
 
 gulp.task('minify-images',
   () => pipe([
     gulp.src([paths.dev.images])
-    ,print()
+    ,p('minify-images')
     ,imagemin()
+    ,gulp.dest(paths.rev.$)
+  ]));
+
+gulp.task('rev',
+  () => pipe([
+    gulp.src([paths.rev.$all])
+    ,p('rev:pre')
+    ,revAll({ignore: ['index.html']})
+    ,p('rev:post')
     ,gulp.dest(paths.dist.$)
   ]));
 
@@ -166,6 +181,12 @@ gulp.task('clean-dist',
     ,clean()
   ]));
 
+gulp.task('clean-rev',
+  () => pipe([
+    gulp.src(paths.rev.$, {read: false})
+    ,clean()
+  ]));
+
 const paths = {
   src: {
     $: './src',
@@ -176,18 +197,23 @@ const paths = {
     scripts: ['src/**/*.js'],
     templates: ['src/modules/**/template.html']
   },
-  dist: {
-    $: './.dist',
-    app: './.dist/app.js',
-    css: './.dist/app.css',
-    html: './.dist/index.html'
-  },
   dev: {
     $: './.dev',
+    $all: './.dev/**',
     app: './.dev/app.js',
     css: './.dev/app.css',
     html: './.dev/index.html',
     images: './.dev/**/*.{svg,gif,png,jpg}',
     vendor: './.dev/vendor.js'
+  },
+  rev: {
+    $: './.rev',
+    $all: './.rev/**'
+  },
+  dist: {
+    $: './.dist',
+    app: './.dist/app.js',
+    css: './.dist/app.css',
+    html: './.dist/index.html'
   }
 };
