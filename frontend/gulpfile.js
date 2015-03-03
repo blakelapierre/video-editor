@@ -187,7 +187,7 @@ const paths = {
     app: './.dev/app.js',
     css: './.dev/app.css',
     html: './.dev/index.html',
-    images: './dev/**/*.{svg,gif,png,jpg}',
+    images: './.dev/**/*.{svg,gif,png,jpg}',
     vendor: './.dev/vendor.js'
   }
 };
