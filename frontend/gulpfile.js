@@ -33,7 +33,7 @@ gulp.task('build', sequence('clean-dist', ['js-vendor', 'js-app', 'less:debug', 
 gulp.task('dev', cb => {
   const {src} = paths;
 
-  sequence('clean-dev', ['js-vendor', 'js-app', 'less:debug', 'html'], 'browser-sync')(cb);
+  sequence('clean-dev', ['js-vendor', 'js-app', 'less:debug', 'html', 'images'], 'browser-sync')(cb);
 
   gulp.watch(src.html, ['html']);
   gulp.watch(src.scripts, ['js-app']);
