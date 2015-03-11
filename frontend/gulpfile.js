@@ -199,7 +199,8 @@ const paths = {
     images: ['./src/**/*.{svg,gif,png,jpg}'],
     scripts: ['src/**/*.js'],
     templates: ['src/modules/**/template.html'],
-    vendor: _.map(dependencies, (version, dependency) => { return `./node_modules/${dependency}/${require(`./node_modules/${dependency}/package.json`).main}`; } ),
+    vendor: ['!./node_modules/*/node_modules/**']
+            .concat(_.map(dependencies, (version, dependency) => { return `./node_modules/${dependency}/**/*.js`; } )),
   },
   dev: {
     $: './.dev',
