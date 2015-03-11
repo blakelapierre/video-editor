@@ -1,4 +1,5 @@
-const gulp = require('gulp'),
+const {dependencies} = require('./package.json'),
+      gulp = require('gulp'),
       multipipe = require('multipipe'),
       path = require('path'),
       browserify = require('browserify'),
@@ -44,6 +45,7 @@ gulp.task('dev', cb => {
   gulp.watch(src.html, ['html']);
   gulp.watch(src.scripts, ['js-app']);
   gulp.watch(src.templates, ['js-app']);
+  gulp.watch(src.vendor, ['js-vendor']);
   gulp.watch(src.less, ['less:debug'])
       .on('change', event => {
         if (event.type === 'deleted') {
@@ -62,11 +64,12 @@ gulp.task('browser-sync',
 gulp.task('js-vendor',
   () => pipe([
     browserify()
-      .require(_.keys(require('./package.json').dependencies))
+      .require(_.keys(dependencies))
       .bundle()
     ,source('vendor.js')
     ,p('js-vendor')
     ,gulp.dest(paths.dev.$)
+    ,reload({stream: true})
   ]));
 
 gulp.task('js-app', ['jshint'],
@@ -75,7 +78,7 @@ gulp.task('js-app', ['jshint'],
       entries: [paths.src.app],
       debug: true
     })
-      .external(_.keys(require('./package.json').dependencies))
+      .external(_.keys(dependencies))
       .bundle()
     ,source('app.js')
     ,p('js-app')
@@ -195,7 +198,8 @@ const paths = {
     html: ['./src/index.html'],
     images: ['./src/**/*.{svg,gif,png,jpg}'],
     scripts: ['src/**/*.js'],
-    templates: ['src/modules/**/template.html']
+    templates: ['src/modules/**/template.html'],
+    vendor: _.map(dependencies, (version, dependency) => { return `./node_modules/${dependency}/${require(`./node_modules/${dependency}/package.json`).main}`; } ),
   },
   dev: {
     $: './.dev',
