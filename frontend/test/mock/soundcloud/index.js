@@ -1,3 +1,0 @@
-window.SC = {
-  'initialize': function ( ) { }
-};
