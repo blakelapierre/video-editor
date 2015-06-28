@@ -2,7 +2,7 @@
   "name": "base-angular",
   "description": "An advanced base Angular.js project supporting ECMAScript 6/7, LESS, with a full Gulp.js build and development pipeline.",
   "repository": "https://github.com/blakelapierre/base-angular",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "dependencies": {
     "angular": "^1.4.1"
   },
