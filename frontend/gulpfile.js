@@ -84,6 +84,10 @@ gulp.task('js-app', ['jshint'],
     })
       .external(_.keys(dependencies))
       .bundle()
+      .on('error', function(err) {
+        console.log('js-app', err.stack);
+        this.emit('end');
+      })
     ,source('app.js')
     ,p('js-app')
     ,gulp.dest(paths.dev.$)
