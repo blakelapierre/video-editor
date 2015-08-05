@@ -173,7 +173,10 @@ gulp.task('rev',
   () => pipe([
     gulp.src([paths.rev.$all])
     ,p('rev:pre')
-    ,revAll({ignore: ['index.html']})
+    ,(new revAll({
+      dontRenameFile: ['index\.html'],
+      dontSearchFile: ['vendor.js']
+    })).revision()
     ,p('rev:post')
     ,gulp.dest(paths.dist.$)
   ]));
