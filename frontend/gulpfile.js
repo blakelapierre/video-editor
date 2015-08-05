@@ -84,7 +84,7 @@ gulp.task('js-app', ['jshint'],
     })
       .external(_.keys(dependencies))
       .bundle()
-      .on('error', function(err) {
+      .on('error', function(err) { // Cannot use => syntax here, as `this` must be set by the caller
         console.log('js-app', err.stack);
         this.emit('end');
       })
