@@ -10,6 +10,7 @@ const {dependencies} = require('./package.json'),
       {
         autoprefixer,
         cached,
+        changed,
         clean,
         concat,
         imagemin,
@@ -48,6 +49,7 @@ gulp.task('dev', cb => {
 
   gulp.watch(src.html, ['html']);
   gulp.watch(src.scripts, ['js-app']);
+  gulp.watch(src.images, ['images']);
   gulp.watch(src.templates, ['js-app']);
   gulp.watch(src.vendor, ['js-vendor']);
   gulp.watch(src.less, ['less:debug'])
@@ -133,8 +135,10 @@ gulp.task('html',
 gulp.task('images',
   () => pipe([
     gulp.src(paths.src.images)
+    ,changed(paths.dev.$)
     ,p('images')
     ,gulp.dest(paths.dev.$)
+    ,reload({stream: true})
   ]));
 
 gulp.task('minify-css',
