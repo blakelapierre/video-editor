@@ -169,7 +169,8 @@ gulp.task('rev',
           gulp.src((src || (() => ([dev[part]])))(paths))
           ,p(name)
           ,fn()
-          ,gulp.dest(dest || rev.$)]))(paths));
+          ,gulp.dest(dest || rev.$)])
+      )(paths));
 
   });
 })('minify'); // Is there a way to get 'minify' to occur before the code...without verbosity?
