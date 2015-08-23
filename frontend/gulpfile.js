@@ -155,25 +155,24 @@ gulp.task('rev',
     ,gulp.dest(paths.dist.$)
   ]));
 
-
 ((task) => {
   _.each({
     css:    {fn: minifyCss},
     js:     {fn: uglify, src: ({dev}) => [dev.app].concat([dev.vendor])},
     html:   {fn: () => minifyHtml({quotes: true})},
     images: {fn: imagemin}
-  }, ({dest, fn, src}, n) => {
-    let name = `${task}:${n}`;
+  }, ({dest, fn, src}, part) => {
+    let name = `${task}:${part}`;
     gulp.task(name,
       () => (({dev, rev}) =>
         pipe([
-          gulp.src((src || (() => ([dev[n]])))(paths))
+          gulp.src((src || (() => ([dev[part]])))(paths))
           ,p(name)
           ,fn()
           ,gulp.dest(dest || paths.rev.$)])) (paths));
 
   });
-})('minify');
+})('minify'); // Is there a way to get 'minify' to occur before the code...without verbosity?
 
 ((task) => _.each(['dev', 'dist', 'rev'],
   version =>
