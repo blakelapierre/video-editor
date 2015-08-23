@@ -37,22 +37,22 @@ let p = name => print(file => console.log(name, file));
 
 gulp.task('default', ['build']);
 
-gulp.task('build', sequence(['clean-rev', 'clean-dist'],
-                            ['js-vendor', 'js-app', 'less:debug', 'html', 'images', 'fonts'],
-                            ['minify-css', 'minify-html', 'minify-js', 'minify-images'],
+gulp.task('build', sequence(['clean:rev', 'clean:dist'],
+                            ['js:vendor', 'js:app', 'less:debug', 'html', 'images', 'fonts'],
+                            ['minify:css', 'minify:html', 'minify:js', 'minify:images'],
                             'rev'));
 
 gulp.task('dev', cb => {
   const {src} = paths;
 
-  sequence('clean-dev', ['js-vendor', 'js-app', 'less:debug', 'html', 'images'], 'browser-sync')(cb);
+  sequence('clean:dev', ['js:vendor', 'js:app', 'less:debug', 'html', 'images'], 'browser-sync')(cb);
 
-  gulp.watch(src.html, ['html']);
-  gulp.watch(src.scripts, ['js-app']);
-  gulp.watch(src.images, ['images']);
-  gulp.watch(src.templates, ['js-app']);
-  gulp.watch(src.vendor, ['js-vendor']);
-  gulp.watch(src.less, ['less:debug'])
+  gulp.watch(src.vendor,    ['js:vendor']);
+  gulp.watch(src.scripts,   ['js:app']);
+  gulp.watch(src.templates, ['js:app']);
+  gulp.watch(src.html,      ['html']);
+  gulp.watch(src.images,    ['images']);
+  gulp.watch(src.less,      ['less:debug'])
       .on('change', event => {
         if (event.type === 'deleted') {
           delete cached.caches['less'][event.path];
@@ -67,18 +67,18 @@ gulp.task('browser-sync',
     ghostMode: false
   }));
 
-gulp.task('js-vendor',
+gulp.task('js:vendor',
   () => pipe([
     browserify()
       .require(_.keys(dependencies))
       .bundle()
     ,source('vendor.js')
-    ,p('js-vendor')
+    ,p('js:vendor')
     ,gulp.dest(paths.dev.$)
     ,reload({stream: true})
   ]));
 
-gulp.task('js-app', ['jshint'],
+gulp.task('js:app', ['js:lint'],
   () => pipe([
     browserify({
       entries: [paths.src.app],
@@ -87,20 +87,20 @@ gulp.task('js-app', ['jshint'],
       .external(_.keys(dependencies))
       .bundle()
       .on('error', function(err) { // Cannot use => syntax here, as `this` must be set by the caller
-        console.log('js-app', err.stack);
+        console.log('js:app', err.stack);
         this.emit('end');
       })
     ,source('app.js')
-    ,p('js-app')
+    ,p('js:app')
     ,gulp.dest(paths.dev.$)
     ,reload({stream: true})
   ]));
 
-gulp.task('jshint',
+gulp.task('js:lint',
   () => pipe([
     gulp.src(paths.src.scripts)
-    ,cached('jshint')
-    ,p('jshint')
+    ,cached('js:lint')
+    ,p('js:lint')
     ,jshint()
     ,jshint.reporter('jshint-stylish')
     ,jshint.reporter('fail')
@@ -141,37 +141,7 @@ gulp.task('images',
     ,reload({stream: true})
   ]));
 
-gulp.task('minify-css',
-  () => pipe([
-    gulp.src([paths.dev.css])
-    ,p('minify-css')
-    ,minifyCss()
-    ,gulp.dest(paths.rev.$)
-  ]));
-
-gulp.task('minify-js',
-  () => pipe([
-    gulp.src([paths.dev.app].concat([paths.dev.vendor]))
-    ,p('minify-js')
-    ,uglify()
-    ,gulp.dest(paths.rev.$)
-  ]));
-
-gulp.task('minify-html',
-  () => pipe([
-    gulp.src([paths.dev.html])
-    ,p('minify-html')
-    ,minifyHtml({quotes: true})
-    ,gulp.dest(paths.rev.$)
-  ]));
-
-gulp.task('minify-images',
-  () => pipe([
-    gulp.src([paths.dev.images])
-    ,p('minify-images')
-    ,imagemin()
-    ,gulp.dest(paths.rev.$)
-  ]));
+gulp.task('fonts');
 
 gulp.task('rev',
   () => pipe([
@@ -185,25 +155,34 @@ gulp.task('rev',
     ,gulp.dest(paths.dist.$)
   ]));
 
-gulp.task('fonts');
 
-gulp.task('clean-dev',
-  () => pipe([
-    gulp.src(paths.dev.$, {read: false})
-    ,clean()
-  ]));
+((task) => {
+  _.each({
+    css:    {fn: minifyCss},
+    js:     {fn: uglify, src: ({dev}) => [dev.app].concat([dev.vendor])},
+    html:   {fn: () => minifyHtml({quotes: true})},
+    images: {fn: imagemin}
+  }, ({dest, fn, src}, n) => {
+    let name = `${task}:${n}`;
+    gulp.task(name,
+      () => (({dev, rev}) =>
+        pipe([
+          gulp.src((src || (() => ([dev[n]])))(paths))
+          ,p(name)
+          ,fn()
+          ,gulp.dest(dest || paths.rev.$)])) (paths));
 
-gulp.task('clean-dist',
-  () => pipe([
-    gulp.src(paths.dist.$, {read: false})
-    ,clean()
-  ]));
+  });
+})('minify');
 
-gulp.task('clean-rev',
-  () => pipe([
-    gulp.src(paths.rev.$, {read: false})
-    ,clean()
-  ]));
+((task) => _.each(['dev', 'dist', 'rev'],
+  version =>
+    gulp.task(`${task}:${version}`,
+      () => pipe([
+        gulp.src(paths[version].$, {read: false})
+        ,clean()
+      ]))
+))('clean');
 
 const paths = {
   src: {
