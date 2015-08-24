@@ -5,4 +5,5 @@ module.exports = {
     .directive('center',     require('./directives/center/directive'))
     .directive('helloWorld', require('./directives/helloWorld/directive'))
     .directive('spinner',    require('./directives/spinner/directive'))
+    .directive('sprites',    require('./directives/sprites/directive'))
 };

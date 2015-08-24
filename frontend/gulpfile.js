@@ -25,6 +25,7 @@ const {dependencies} = require('./package.json'),
         revAll,
         sequence,
         sourcemaps,
+        spritesmith,
         tasks,
         uglify,
         util
@@ -38,25 +39,28 @@ let p = name => print(file => console.log(name, file));
 gulp.task('default', ['build']);
 
 gulp.task('build', sequence(['clean:rev', 'clean:dist'],
-                            ['js:vendor', 'js:app', 'less:debug', 'html', 'images', 'fonts'],
+                            ['js:vendor', 'js:app', 'html', 'images', 'styles', 'fonts'],
                             ['minify:css', 'minify:html', 'minify:js', 'minify:images'],
                             'rev'));
 
 gulp.task('dev', cb => {
   const {src} = paths;
 
-  sequence('clean:dev', ['js:vendor', 'js:app', 'less:debug', 'html', 'images'], 'browser-sync')(cb);
+  sequence('clean:dev',
+          ['js:vendor', 'js:app', 'html', 'images'],
+          'styles',
+          'browser-sync')(cb);
 
   gulp.watch(src.vendor,    ['js:vendor']);
   gulp.watch(src.scripts,   ['js:app']);
   gulp.watch(src.templates, ['js:app']);
   gulp.watch(src.html,      ['html']);
   gulp.watch(src.images,    ['images']);
-  gulp.watch(src.less,      ['less:debug'])
+  gulp.watch(src.less,      ['styles'])
       .on('change', event => {
         if (event.type === 'deleted') {
-          delete cached.caches['less'][event.path];
-          remember.forget('less', event.path);
+          delete cached.caches['styles'][event.path];
+          remember.forget('styles', event.path);
         }
       });
 });
@@ -106,7 +110,19 @@ gulp.task('js:lint',
     ,jshint.reporter('fail')
   ]));
 
-gulp.task('less:debug',
+gulp.task('styles', ['less:concat']);
+
+gulp.task('less:concat', ['less:debug'],
+  () => pipe([
+    gulp.src(['./.dev/tmp.css', './.dev/sprites.css'])
+    ,p('less:concat:pre')
+    ,concat('app.css')
+    ,p('less:concat:post')
+    ,gulp.dest(paths.dev.$)
+    ,reload({stream: true})
+  ]));
+
+gulp.task('less:debug', ['sprites'],
   () => multipipe( // my gulp-pipe fails here because of the less().on [doesn't forward errors]
     gulp.src(paths.src.less)
     ,cached('less')
@@ -117,12 +133,31 @@ gulp.task('less:debug',
     ,autoprefixer()
     ,sourcemaps.write()
     ,remember('less')
-    ,concat('app.css')
-    ,p('less:debug:concat:post')
+    ,concat('tmp.css')
     ,gulp.dest(paths.dev.$)
-    ,print(f => `reload${f}`)
-    ,reload({stream: true})
   ));
+
+gulp.task('sprites',
+  () => pipe([
+    gulp.src(paths.src.images)
+    ,p('sprites:pre')
+    ,spritesmith({
+      imgName: './sprites.png',
+      cssName: './sprites.css',
+      cssTemplate:
+        ({sprites, spritesheet}) => {
+          return _.map(sprites, sprite => {
+            const {name, offset_x, offset_y, width, height} = sprite,
+                  position = {x: 100 * offset_x / width, y: 100 * offset_y / height},
+                  size = {x: 100 * spritesheet.width / width, y: 100 * spritesheet.height / height};
+            return `.sprite-${name} { background-image: url('${spritesheet.image}'); background-position: ${position.x}% ${position.y}% ; background-size: ${size.x}% ${size.y}%; width: 100%; height: 100%; }`;
+          }).join('\n');
+        },
+      cssOpts: {cssSelector: ({name}) => `.sprite-${name}`}
+    })
+    ,p('sprites:post')
+    ,gulp.dest(paths.dev.$)
+  ]));
 
 gulp.task('html',
   () => pipe([
@@ -160,7 +195,7 @@ gulp.task('rev',
     css:    {fn: minifyCss},
     js:     {fn: uglify, src: ({dev}) => [dev.app].concat([dev.vendor])},
     html:   {fn: () => minifyHtml({quotes: true})},
-    images: {fn: imagemin}
+    images: {fn: imagemin, src: ({dev}) => [dev.sprites]}
   }, ({dest, fn, src}, part) => {
     let name = `${task}:${part}`;
     gulp.task(name,
@@ -203,6 +238,7 @@ const paths = {
     css: './.dev/app.css',
     html: './.dev/index.html',
     images: './.dev/**/*.{svg,gif,png,jpg}',
+    sprites: './.dev/sprites.png',
     vendor: './.dev/vendor.js'
   },
   rev: {
