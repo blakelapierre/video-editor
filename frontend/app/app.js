@@ -23,8 +23,10 @@ module.exports = {
     .directive('filtersPanel',    require('./modules/video-editor/filtersPanel/directive'))
     .directive('playbackError',   require('./modules/video-editor/playbackError/directive'))
     .directive('playbackSurface', require('./modules/video-editor/playbackSurface/directive'))
+      .directive('html5Video',    require('./modules/video-editor/playbackSurface/html5Video/directive'))
     .directive('positionBar',     require('./modules/video-editor/positionBar/directive'))
     .directive('teaser',          require('./modules/video-editor/teaser/directive'))
     .directive('timeline',        require('./modules/video-editor/timeline/directive'))
     .directive('transformsPanel', require('./modules/video-editor/transformsPanel/directive'))
+    .directive('videoControl',    require('./modules/video-editor/videoControl/directive'))
 };

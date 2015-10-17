@@ -1,0 +1,11 @@
+<playback-error ng-if="video.error != null" ng-class="{'expand': expand}" ng-click="expand = !expand"></playback-error>
+<div ng-if="video.src != null"
+     ng-show="video.success"
+     class="has-video">
+  <div class="divider">
+    <playback-surface></playback-surface>
+    <filters-panel ng-hide="hideFilters"></filters-panel>
+  </div>
+  <position-bar ng-hide="hidePosition"></position-bar>
+  <timeline ng-hide="hideTimeline"></timeline>
+</div>

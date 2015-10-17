@@ -18,9 +18,9 @@ module.exports = ['on', 'off', (on, off) => {
             canvases = element.find('canvas');
 
         let offsetAdjustment = thumbnails.length % 2 === 0 ? 1 : 0;
+
         _.each(_.zip([thumbnails, canvases]), (pair, index) => {
-          let thumbnail = pair[0],
-              canvas = pair[1],
+          let [thumbnail, canvas] = pair,
               context = canvas.getContext('2d');
 
           canvas.width = canvas.parentNode.clientWidth;
@@ -84,8 +84,6 @@ module.exports = ['on', 'off', (on, off) => {
         thumbnailEl.addEventListener('seeked', seeked);
 
         return time => {
-          let thumbnails = $scope.thumbnails;
-
           nextIndex = 0;
 
           _.each(thumbnails, thumbnail => {
@@ -109,49 +107,64 @@ module.exports = ['on', 'off', (on, off) => {
         };
 
         function seeked() {
-          let thumbnail = thumbnails[nextIndex],
-              canvas = thumbnail.canvas,
-              context = thumbnail.context;
-
-          let vw = thumbnailEl.videoWidth,
-              vh = thumbnailEl.videoHeight,
-              ratio = vw / vh;
-
-          if (ratio > 1) {
-            canvas.width = canvas.parentNode.clientWidth;
-            canvas.height = canvas.width / ratio;
-          }
-          else {
-            canvas.height = canvas.parentNode.clientHeight;
-            canvas.width = canvas.height * ratio;
-          }
-
-          if (thumbnail.time > thumbnailEl.duration) {
-            context.clearRect(0, 0, canvas.width, canvas.height);
-          }
-          else {
-            context.drawImage(thumbnailEl, 0, 0, canvas.width, canvas.height);
-          }
-
-          thumbnail.pending = false;
-
-          nextIndex++;
-          if (nextIndex < thumbnails.length) {
-            let thumbnail = thumbnails[nextIndex];
-            thumbnailEl.currentTime = thumbnail.time;
-          }
-
+          draw();
+          triggerNext();
           $scope.$apply();
+
+          function draw() {
+            const thumbnail = thumbnails[nextIndex],
+                  {canvas, context, time} = thumbnail,
+                  {videoWidth: vw, videoHeight: vh, duration} = thumbnailEl,
+                  {parentNode: {clientWidth, clientHeight}} = canvas,
+                  ratio = vw / vh;
+
+            let {width, height} = canvas;
+
+            if (ratio > 1) {
+              width = clientWidth;
+              height = width / ratio;
+            }
+            else {
+              height = clientHeight;
+              width = height / ratio;
+              // width = clientWidth;
+              // height = width * ratio;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            if (time > duration) {
+              context.clearRect(0, 0, width, height);
+            }
+            else {
+              context.drawImage(thumbnailEl, 0, 0, width, height);
+            }
+            thumbnail.pending = false;
+          }
+
+          function triggerNext() {
+            nextIndex++;
+            if (nextIndex < thumbnails.length) {
+              let thumbnail = thumbnails[nextIndex];
+              thumbnailEl.currentTime = thumbnail.time;
+            }
+          }
         }
       })(thumbnailEl, $scope.thumbnails);
 
       function wheel(event) {
-        let time = videoEl.currentTime,
-            duration = videoEl.duration,
-            deltaY = event.deltaY,
-            thumbnails = $scope.thumbnails,
-            firstThumbnail = thumbnails[0],
+        let {currentTime, duration} = videoEl,
+            {deltaY} = event,
+            {thumbnails} = $scope,
+            [firstThumbnail] = thumbnails,
             lastThumbnail = thumbnails[thumbnails.length - 1];
+            // time = videoEl.currentTime,
+            // duration = videoEl.duration,
+            // deltaY = event.deltaY,
+            // thumbnails = $scope.thumbnails,
+            // firstThumbnail = thumbnails[0],
+            // lastThumbnail = thumbnails[thumbnails.length - 1];
 
         $scope.$apply(() => {
           if (deltaY > 0) {
@@ -165,10 +178,10 @@ module.exports = ['on', 'off', (on, off) => {
             });
           }
 
-          drawThumbnails(time);
+          drawThumbnails(currentTime);
 
           $scope.timelineWidth = clamp(100 * (lastThumbnail.time - firstThumbnail.time) / duration, 0, 100);
-          $scope.timelineLeft = clamp(100 * (time + firstThumbnail.offset) / duration, 0, 100);
+          $scope.timelineLeft = clamp(100 * (currentTime + firstThumbnail.offset) / duration, 0, 100);
         });
       }
     },

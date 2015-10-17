@@ -80,11 +80,20 @@ module.exports = ['$$rAF', 'on', ($$rAF, on) => {
       }
     },
     controller: ['$scope', '$$rAF', ($scope, $$rAF) => {
-      let videoEl = $scope.videoEl,
-          currentTime;
+      let currentTime;
+
+      $scope.$on('videoEl', videoEl => {
+        $scope.videoEl = videoEl; // this shouldn't be on $scope
+
+        videoEl.addEventListener('play', () => $$rAF(animateBar));
+        // videoEl.addEventListener('timeupdate', () => $scope.updateBar(videoEl.currentTime));
+        videoEl.addEventListener('loadeddata', () => $scope.updateBar(videoEl.currentTime));
+      });
 
       $scope.updateBar = time => {
-        if (time !== currentTime) {
+        const {videoEl} = $scope;
+
+        if (videoEl && time !== currentTime) {
           // $$rAF(() => {,
             currentTime = time;
             $scope.$apply(() => {
@@ -104,13 +113,12 @@ module.exports = ['$$rAF', 'on', ($$rAF, on) => {
         }
       };
 
-      videoEl.addEventListener('play', () => $$rAF(animateBar));
-      // videoEl.addEventListener('timeupdate', () => $scope.updateBar(videoEl.currentTime));
-      videoEl.addEventListener('loadeddata', () => $scope.updateBar(videoEl.currentTime));
-
       function animateBar() {
-        $scope.updateBar(videoEl.currentTime);
-        if (!videoEl.paused) $$rAF(animateBar);
+        const {videoEl} = $scope;
+        if (videoEl) {
+          $scope.updateBar(videoEl.currentTime);
+          if (!videoEl.paused) $$rAF(animateBar);
+        }
       }
     }]
   };

@@ -56,86 +56,93 @@ module.exports = [() => {
     restrict: 'E',
     template: require('./template.html'),
     link: ($scope, element, attributes) => {
-      let videoEl = element.find('video')[0],
-          overlayEl = element.find('div')[0],
-          currentMode = 'playbackSpeed',
-          video = angular.element(videoEl),
-          overlay = angular.element(overlayEl);
+      // console.log(element.find('video'));
+      // let videoEl = element.find('video')[0],
+      //     // iframeEl = element.find('iframe')[0],
+      //     overlayEl = element.find('div')[0],
+      //     currentMode = 'playbackSpeed',
+      //     video = angular.element(videoEl),
+      //     overlay = angular.element(overlayEl);
 
-      $scope.videoEl = videoEl;
+      // $scope.videoEl = videoEl;
+      // // $scope.iframeEl = document.getElementsByTagName('iframe')[0];
+      // console.log('got iframe ', $scope.iframeEl);
 
-      videoEl.addEventListener('loadeddata', loadeddata);
-      videoEl.addEventListener('loadedmetadata', loadedmetadata);
-      videoEl.addEventListener('loadstart', loadstart);
-      videoEl.addEventListener('error', error);
-      overlayEl.addEventListener('wheel', wheel);
+      // videoEl.addEventListener('loadeddata', loadeddata);
+      // videoEl.addEventListener('loadedmetadata', loadedmetadata);
+      // videoEl.addEventListener('loadstart', loadstart);
+      // videoEl.addEventListener('error', error);
+      // overlayEl.addEventListener('wheel', wheel);
 
-      function loadeddata(event) {
-        $scope.$apply(() => {
-          $scope.video.loaded = true;
-        });
-      }
+      // function loadeddata(event) {
+      //   $scope.$apply(() => {
+      //     $scope.video.loaded = true;
+      //   });
+      // }
 
-      function loadedmetadata(event) {
-        $scope.$apply(() => {
-          $scope.video.success = true;
-          $scope.setPlaybackRate(1);
-        });
-      }
+      // function loadedmetadata(event) {
+      //   $scope.$apply(() => {
+      //     $scope.video.success = true;
+      //     $scope.setPlaybackRate(1);
+      //   });
+      // }
 
-      function loadstart(event) {
+      // function loadstart(event) {
 
-      }
+      // }
 
-      function error() {
-        const error = videoEl.error;
-        $scope.$apply(() => {
-          $scope.video.src = undefined;
-          $scope.video.success = false;
-          $scope.video.loaded = false;
-          $scope.video.error = error;
+      // function error() {
+      //   const {error} = videoEl;
+      //   console.log({error});
+      //   $scope.$apply(() => {
+      //     const {video} = $scope;
 
-          switch (error.code) {
-            case 4:
-              $scope.video.errorMessage = 'Your browser does not support this video!';
-          }
-        });
-      }
+      //     video.src = undefined;
+      //     video.success = false;
+      //     video.loaded = false;
+      //     video.error = error;
 
-      function wheel(event) {
-        wheelHandlers[currentMode]($scope, videoEl, event);
-      }
+      //     switch (error.code) {
+      //       case 4:
+      //         video.errorMessage = 'Your browser does not support this video!';
+      //     }
+      //   });
+      // }
 
-      $scope.togglePlay = () => {
-        if (videoEl.paused) videoEl.play();
-        else videoEl.pause();
-      };
+      // function wheel(event) {
+      //   wheelHandlers[currentMode]($scope, videoEl, event);
+      // }
 
-      $scope.setCurrentTime = time => {
-        if (videoEl.duration > 0) videoEl.currentTime = time;
-      };
+      // $scope.togglePlay = () => {
+      //   if (videoEl.paused) videoEl.play();
+      //   else videoEl.pause();
+      // };
 
-      $scope.incrementCurrentTime = delta => {
-        if (videoEl.duration > 0) videoEl.currentTime += delta;
-      };
+      // $scope.setCurrentTime = time => {
+      //   if (videoEl.duration > 0) videoEl.currentTime = time;
+      // };
 
-      $scope.setPlaybackRate = rate => {
-        if (rate === undefined) rate = 1;
+      // $scope.incrementCurrentTime = delta => {
+      //   if (videoEl.duration > 0) videoEl.currentTime += delta;
+      // };
 
-        videoEl.playbackRate = rate;
-        if      (rate < 0.0005) rate = rate.toFixed(7);
-        else if (rate < 0.005) rate = rate.toFixed(6);
-        else if (rate < 0.05) rate = rate.toFixed(5);
-        else if (rate < 0.5) rate = rate.toFixed(4);
-        else rate = rate.toFixed(3);
-        $scope.video.playbackRate = rate;
-      };
+      // $scope.setPlaybackRate = rate => {
+      //   if (rate === undefined) rate = 1;
 
-      $scope.createMediaElementSource = context => {
-        return context.createMediaElementSource(videoEl);
-      };
+      //   videoEl.playbackRate = rate;
+      //   if      (rate < 0.0005) rate = rate.toFixed(7);
+      //   else if (rate < 0.005) rate = rate.toFixed(6);
+      //   else if (rate < 0.05) rate = rate.toFixed(5);
+      //   else if (rate < 0.5) rate = rate.toFixed(4);
+      //   else rate = rate.toFixed(3);
+      //   $scope.video.playbackRate = rate;
+      // };
 
-      $scope.setPlaybackRate(videoEl.playbackRate);
+      // $scope.createMediaElementSource = context => {
+      //   return context.createMediaElementSource(videoEl);
+      // };
+
+      // $scope.setPlaybackRate(videoEl.playbackRate);
     },
     controller: ['$scope', $scope => {
       $scope.showFilters = true;

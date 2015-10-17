@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 module.exports = () => {
   return {
     restrict: 'E',
@@ -10,6 +12,14 @@ module.exports = () => {
         videoEl = newEl;
 
         applyTransformStyles();
+      });
+
+      $scope.$watch('iframeEl', iframeEl => {
+        console.log('iframe', $scope.iframeEl);
+
+        const {video} = $scope;
+
+        if(video && video.external) videoEl = iframeEl;
       });
 
       let currentTransform = false,
