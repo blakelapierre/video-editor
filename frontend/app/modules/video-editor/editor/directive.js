@@ -7,6 +7,7 @@ module.exports = ['$sce', ({trustAsResourceUrl}) => {
       urlTransform: a => `https://youtube.com/embed/${a.search.match(/v\=(.+?)&?.*/)[1]}?autoplay=1`,
       paramMap: {
         'v': 'videoID',
+        // Currently this does nothing. YT's embed URL scheme doesn't appear to support it
         't': 'time'
       },
       deconstructURL: (a, paramMap) => _.transform(_.map(a.search.substring(1).split('&'), kvp => kvp.split('=')), (params, [key, value]) => params[paramMap[key]] = value),
@@ -37,11 +38,10 @@ module.exports = ['$sce', ({trustAsResourceUrl}) => {
 
       $scope.receivedPaste = ({clipboardData}) => {
         const a = createAnchor(clipboardData.getData('text/plain'));
-console.log({a});
+
         _.some(services, handlePaste);
 
         function handlePaste({host, deconstructURL, constructURL, paramMap, videoConstructor}, name) {
-          console.log('checking', name, 'host', host, a);
           if (a.host.match(host)) {
             $scope.$apply(() => {
               $scope.showTeaser = false;
@@ -51,7 +51,6 @@ console.log({a});
             });
           }
         }
-        console.dir(a);
       };
 
       $scope.droppedFiles = ($files, $items) => {
@@ -70,7 +69,7 @@ console.log({a});
                   type = file.type;
 
             if (type.indexOf('video') === 0) {
-              $scope.video.src = $sce.trustAsResourceUrl(URL.createObjectURL(file));
+              $scope.video.src = trustAsResourceUrl(URL.createObjectURL(file));
               $scope.video.loaded = false;
               $scope.video.error = undefined;
 
@@ -90,7 +89,7 @@ console.log({a});
           for (var i = 0; i < length; i++) {
             const file = $files[i];
 
-            file.src = $sce.trustAsResourceUrl(URL.createObjectURL(file));
+            file.src = trustAsResourceUrl(URL.createObjectURL(file));
             file.loaded = false;
             file.error = undefined;
 
