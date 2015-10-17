@@ -41,11 +41,8 @@ module.exports = ['on', 'off', (on, off) => {
       $scope.$watch('videoEl', (newEl, oldEl) => {
         videoEl = newEl;
 
-        if (oldEl) {
-          off(oldEl, {pause, timeupdate, loadeddata});
-        }
-
-        on(videoEl, {pause, timeupdate, loadeddata});
+        if (oldEl)   off(oldEl,  {pause, timeupdate, loadeddata});
+        if (videoEl) on(videoEl, {pause, timeupdate, loadeddata});
 
         function pause() {
           drawThumbnails(videoEl.currentTime);

@@ -51,12 +51,14 @@ module.exports = () => {
       }
 
       function applyTransformStyles() {
-        const style = getTransformStyle();
+        if (videoEl) {
+          const style = getTransformStyle();
 
-        videoEl.style['transform'] = style;
-        videoEl.style['-webkit-transform'] = style;
-        videoEl.style['-moz-transform'] = style;
-        videoEl.style['-ms-transform'] = style;
+          videoEl.style['transform'] = style;
+          videoEl.style['-webkit-transform'] = style;
+          videoEl.style['-moz-transform'] = style;
+          videoEl.style['-ms-transform'] = style;
+        }
       }
 
       function getTransformStyle() {

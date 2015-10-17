@@ -60,9 +60,11 @@ module.exports = () => {
       $scope.$watch('filters', () => applyFilters(), true);
 
       function applyFilters() {
-        let style = getFilterStyle();
-        videoEl.style['-webkit-filter'] = $scope.videoElFilterStyle = style;
-        videoEl.style['filter'] = $scope.videoElFilterStyle = style;
+        if (videoEl) {
+          let style = getFilterStyle();
+          videoEl.style['-webkit-filter'] = $scope.videoElFilterStyle = style;
+          videoEl.style['filter'] = $scope.videoElFilterStyle = style;
+        }
       }
 
       function getFilterStyle() {
