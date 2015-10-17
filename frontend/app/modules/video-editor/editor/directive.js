@@ -1,4 +1,27 @@
-module.exports = ['$sce', $sce => {
+import _ from 'lodash';
+
+module.exports = ['$sce', ({trustAsResourceUrl}) => {
+  const services = {
+    'youtube': {
+      host: /(.*\.+)?youtube.com$/i,
+      urlTransform: a => `https://youtube.com/embed/${a.search.match(/v\=(.+?)&?.*/)[1]}?autoplay=1`,
+      paramMap: {
+        'v': 'videoID',
+        't': 'time'
+      },
+      deconstructURL: (a, paramMap) => _.transform(_.map(a.search.substring(1).split('&'), kvp => kvp.split('=')), (params, [key, value]) => params[paramMap[key]] = value),
+      constructURL: ({videoID, time}) => `https://youtube.com/embed/${videoID}?autoplay=1${time ? '&t=' + time : ''}`,
+      videoConstructor: url => ({
+        type: 'youtube',
+        external: true,
+        loaded: true,
+        success: true,
+        src: trustAsResourceUrl(url)
+      })
+    }
+  };
+
+
   return {
     restrict: 'E',
     template: require('./template.html'),
@@ -12,35 +35,21 @@ module.exports = ['$sce', $sce => {
       $scope.video = {src: undefined, success: false};
       $scope.videos = [];
 
-      $scope.receivedPaste = $event => {
-        const a = document.createElement('a');
+      $scope.receivedPaste = ({clipboardData}) => {
+        const a = createAnchor(clipboardData.getData('text/plain'));
+console.log({a});
+        _.some(services, handlePaste);
 
-        let text = $event.clipboardData.getData('text/plain');
+        function handlePaste({host, deconstructURL, constructURL, paramMap, videoConstructor}, name) {
+          console.log('checking', name, 'host', host, a);
+          if (a.host.match(host)) {
+            $scope.$apply(() => {
+              $scope.showTeaser = false;
+              $scope.mode = 'playback';
 
-        console.log({text});
-        if (!text.match(/^https?/)) text = `https://${text}`;
-        console.log({text});
-
-        a.href = text;
-
-        if (a.host.match(/^(.*\.+)?youtube.com$/i)) {
-          console.log('matched');
-
-          const videoID = a.search.match(/v\=(.+)\&?/)[1],
-                videoURL = `https://youtube.com/embed/${videoID}?autoplay=1`;
-
-          $scope.$apply(() => {
-            $scope.showTeaser = false;
-            $scope.mode = 'playback';
-
-            $scope.videos.push({
-              external: true,
-              loaded: true,
-              success: true,
-              src: $sce.trustAsResourceUrl(videoURL)
+              $scope.videos.push(videoConstructor(constructURL(deconstructURL(a, paramMap))));
             });
-          });
-          console.log(videoID);
+          }
         }
         console.dir(a);
       };
@@ -92,3 +101,9 @@ module.exports = ['$sce', $sce => {
     }]
   };
 }];
+
+function createAnchor(text) {
+  const a = document.createElement('a');
+  a.href = text;
+  return a;
+}

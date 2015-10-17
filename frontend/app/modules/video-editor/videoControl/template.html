@@ -1,7 +1,7 @@
 <playback-error ng-if="video.error != null" ng-class="{'expand': expand}" ng-click="expand = !expand"></playback-error>
 <div ng-if="video.src != null"
      ng-show="video.success"
-     class="has-video">
+     class="has-video type-{{video.type}}">
   <div class="divider">
     <playback-surface></playback-surface>
     <filters-panel ng-hide="hideFilters"></filters-panel>
