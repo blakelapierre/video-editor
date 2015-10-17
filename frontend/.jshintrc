@@ -1,7 +1,6 @@
 {
-  "node": true,
-  "browser": true,
   "esnext": true,
+<<<<<<< HEAD
   "bitwise": true,
   "camelcase": true,
   "eqeqeq": true,
@@ -27,3 +26,8 @@
     "moment": false
   }
 }
+=======
+  "laxcomma": true,
+  "noyield": true
+}
+>>>>>>> upstream/master
